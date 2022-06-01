@@ -4,8 +4,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import getColorByPokemonType from './../../utils/pokemonTypeColor';
 import ButtonsNav from './../../components/ButtonsNav';
 import {fetchPokemons} from './../../cors/pokeApi';
-import {pokemonsDetails} from './../../cors/pokeApi';
-
+import {pokemonInfos} from './../../cors/pokeApi';
 import Pokemons from './../../components/Pokemons';
 
 import About from './../../components/Details/About/index';
@@ -33,16 +32,34 @@ export default function Details() {
   const route = useRoute();
   const {id, name, type, color, img} = route.params;
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
-
-  const [allPokemons, setAllPokemons] = useState([]);
+  const [pokemonData, setPokemonData] = useState(undefined);
+  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] = useState(undefined);
   const [active, setActive] = useState('about');
   const [show, setShow] = useState(false);
 
+
+  //USE EFFECT FETCHPOKEMONS
   useEffect(() => {
     console.log('test fetch all INFORMATIONS DANS LA PAGE DETAILS');
     const init = async () => {
       const allPokemons = await fetchPokemons();
-      setAllPokemons(allPokemons);
+      const myPokemon = allPokemons.find(poke => (poke.number ==id));
+      console.log('mon pokemon :', myPokemon);
+      console.log('mon pokeimon ID :', id);
+      // console.log('mon pokeimon special :', myPokemon.stats.special.attack );
+      setPokemonData(myPokemon);
+
+    };
+    init();
+  }, []);
+
+
+  //USE EFFECT POKEMONSINFOS
+  useEffect(() => {
+    console.log('test POKEMONiNFO LA PAGE DETAILS');
+    const init = async () => {
+      const allPokemons = await pokemonInfos();
+      setPokemonInfoDescritpion(pokemonInfoDescritpion);
     };
     init();
   }, []);
@@ -99,12 +116,15 @@ export default function Details() {
           </View>
         </SafeAreaView>
         {/*TEST CALL COMPONENTS */}
-        <View style={{width: '100%', height: 500}}>
-          {active === 'about' && <About />}
+        {/* <View style={{width: '100%', height: 500}}>
+          {active === 'about' && <About 
+               id={pokemonData.id}
+               height={pokemonData.height}
+               weight={pokemonData.weight}
+                />}
           {active === 'BaseStats' && <BaseStats />}
-        </View>
-        <ScrollView>
-          {/* <FlatList
+        </View> */}
+        {/* <FlatList
           style={{}}
           contentContainerStyle={styles.container}
           numColumns={1}
@@ -112,18 +132,36 @@ export default function Details() {
           keyExtractor={item => item.name}
           renderItem={({item, index}) => <About key={index} item={item} />}
         /> */}
-{/* 
-          {allPokemons.map((item, index) => (
-            <About
-              key={index}
-              id={item.id}
-              height={item.height}
-              weight={item.weight}
-              descritpion={item.description}
-            />
-          ))} */}
-        </ScrollView>
+
+        {pokemonData &&  (
+          <About
+            id={pokemonData.id}
+            height={pokemonData.height}
+            weight={pokemonData.weight}
+          />
+        )}
+
       </View>
+        {pokemonData && (
+          <BaseStats
+            id={pokemonData.id}
+            hp={pokemonData.stats.hp}
+            attack={pokemonData.stats.attack}
+            defense={pokemonData.stats.defense}
+            specialAttck={pokemonData.stats.specialAttack}
+             specialDef={pokemonData.stats.specialDefense}
+            speed={pokemonData.stats.speed}
+            total={pokemonData.stats.hp 
+              + pokemonData.stats.attack
+              + pokemonData.stats.defense
+              + pokemonData.stats.speed
+             // + pokemonData.stats.specialAttck
+             // + pokemonData.stats.specialDef
+             }
+          />
+        )}
+
+
 
       {/*TEST RECUPERATION DES DONNEES PART SECONDE CALL API */}
     </View>

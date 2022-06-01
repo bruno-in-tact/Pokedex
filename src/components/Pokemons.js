@@ -20,14 +20,7 @@ import {
 
 const Pokemons = ({key, item}) => {
   const navigation = useNavigation();
-  console.log(
-    'TEST STATS',
-    item.height,
-    'weight',
-    item.weight,
-    'HP -----',
-    item.hp,
-  );
+ 
 
   return (
     <TouchableOpacity

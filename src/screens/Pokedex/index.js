@@ -30,7 +30,6 @@ export default function Pokedex() {
       const allPokemons = await fetchPokemons();
       setAllPokemons(allPokemons);
       setisLoading(false);
-      console.log(`allPokemons`, allPokemon);
     };
 
     init();
