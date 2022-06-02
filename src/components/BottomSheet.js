@@ -1,6 +1,20 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useEffect, useImperativeHandle} from 'react';
+import React, {useCallback, useEffect, useImperativeHandle, useState} from 'react';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+
+import {textColor} from './src/assets/colors';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {fetchPokemons} from './../cors/pokeApi';
+import {pokeSpecies} from './../cors/pokeApi';
+
+import ButtonsNav from './ButtonsNav';
+import Pokemons from './Pokemons';
+import About from './Details/About/index';
+import BaseStats from './Details/BaseStats/index';
+import Evolution from './Details/Evolution/index';
+import Moves from './Details/Moves/index';
+
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+
 import Animated, {
   Extrapolate,
   interpolate,
@@ -10,10 +24,80 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import {
+    ImageBackground,
+    FlatList,
+    View,
+    Text,
+    ScrollView,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    StyleSheet,
+    TextInput,
+    Button,
+    SafeAreaView,
+    Alert,
+  } from 'react-native';
+
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
 
 const BottomSheet = () => {
+
+
+
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {id, name, type, color, img} = route.params;
+  const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
+  const [pokemonData, setPokemonData] = useState(undefined);
+  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] =
+    useState(undefined);
+
+  const [currentTab, setCurrentTab] = useState(1);
+
+  const handleDisplayTabs = i => {
+    setCurrentTab(i);
+  };
+
+ 
+
+  //USE EFFECT FETCHPOKEMONS
+  useEffect(() => {
+    console.log('test fetch all INFORMATIONS DANS LA PAGE DETAILS');
+    const init = async () => {
+      const allPokemons = await fetchPokemons();
+      const myPokemon = allPokemons.find(poke => poke.number == id);
+      console.log('mon pokemon :', myPokemon);
+      console.log('mon pokeimon ID :', id);
+      // console.log('mon pokeimon special :', myPokemon.stats.special.attack );
+      setPokemonData(myPokemon);
+    };
+    init();
+  }, []);
+
+  //USE EFFECT POKEMONSINFOS
+  useEffect(() => {
+    console.log('test POKEMONiNFO LA PAGE DETAILS');
+    const init = async () => {
+      const allPokemons = await pokeSpecies(id);
+      setPokemonInfoDescritpion(pokemonInfoDescritpion);
+      consle.log('test descritpion de mon pokemon', myPokemonDescription);
+    };
+    init();
+  }, []);
+
+  const sheetRef = React.useRef(null);
+
+
+
+
+
+
+
+
+
 const translateY = useSharedValue(0);
 
   const gesture = Gesture.Pan().onUpdate((event) =>{
@@ -29,7 +113,93 @@ const rBottomSheetStyle = useAnimatedStyle(() => {
     <GestureDetector gesture={gesture}>
     <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
       <View style={styles.line} />
-      <Text>zdfezefefer</Text>
+      <SafeAreaView style={styles.container}>
+        
+        <View style={styles.parent}>
+          <View
+            style={{
+              height: 30,
+              width: 400,
+              display: 'flex',
+              flexDirection: 'row',
+            }}>
+            <TouchableOpacity
+              style={{height: 30, width: 100}}
+              onPress={() => {
+                handleDisplayTabs(1);
+              }}>
+              <ButtonsNav text={'About'} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{height: 30, width: 100}}
+              onPress={() => {
+                handleDisplayTabs(2);
+              }}>
+              <ButtonsNav text={'Base Stats'} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{height: 30, width: 100}}
+              onPress={() => {
+                handleDisplayTabs(3);
+              }}>
+              <ButtonsNav text={'Evolution'} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{height: 30, width: 100}}
+              onPress={() => {
+                handleDisplayTabs(4);
+              }}>
+              <ButtonsNav text={'Move'} />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              backgroundColor: 'white',
+              height: '100%',
+              width: 400,
+              display: 'flex',
+              paddingHorizontal: 30,
+            }}>
+            {currentTab === 1 && pokemonData && (
+              <About
+                id={pokemonData.id}
+                height={pokemonData.height}
+                weight={pokemonData.weight}
+              />
+            )}
+
+            {currentTab === 2 && pokemonData && (
+              <BaseStats
+                id={pokemonData.id}
+                hp={pokemonData.stats.hp}
+                attack={pokemonData.stats.attack}
+                defense={pokemonData.stats.defense}
+                specialAttck={pokemonData.stats.specialAttack}
+                specialDef={pokemonData.stats.specialDefense}
+                speed={pokemonData.stats.speed}
+                total={
+                  pokemonData.stats.hp +
+                  pokemonData.stats.attack +
+                  pokemonData.stats.defense +
+                  pokemonData.stats.speed
+                  // + pokemonData.stats.specialAttck
+                  // + pokemonData.stats.specialDef
+                }
+              />
+            )}
+            {currentTab === 3 && pokemonData && (
+              <Evolution id={pokemonData.id} img={img} />
+            )}
+
+            {currentTab === 4 && pokemonData && (
+              <Moves id={pokemonData.id} />
+            )}
+          </View>
+        </View>
+      </SafeAreaView>
     </Animated.View>
   </GestureDetector>
   

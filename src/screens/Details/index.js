@@ -83,141 +83,43 @@ export default function Details() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
+
+      <View
+    style={{
+      ...styles.imgBackground,
+      backgroundColor: getColorByPokemonType(type),
+    }}>
+    <ImageBackground
+      style={styles.heart}
+      source={require('./../../assets/Images/heart.png')}
+    />
+
+    <TouchableOpacity onPress={handleGoBack}>
+      <ImageBackground
+        style={styles.imgArrowBack}
+        source={require('./../../assets/Images/white.png')}
+        resizeMode="cover"
+      />
+    </TouchableOpacity>
+    <Text style={styles.pokemonName}>{name}</Text>
+    <Text style={styles.id}>#{String(id).padStart(3, '0')}</Text>
+    <View style={styles.itemContainer}>
+      <Text style={styles.typesPokemon}>{type}</Text>
+    </View>
+    <ImageBackground
+      style={styles.imgPokeStyle}
+      source={require('./../../assets/Images/Element.png')}
+    />
+    <ImageBackground
+      style={styles.imgPokemon}
+      source={{uri: img}}></ImageBackground>
+  </View>
+
       </View>
           <BottomSheet/>
     </GestureHandlerRootView>
   );
 }
-
-//   return (
-//     // <GestureHandlerRootView style={{flex: 1}}>
-//     // container view qui prend l'écran entier
-//     <View style={{flex: 1, width: '100%', height: '100%'}}>
-//       {/* CONTAINER IMG BACKGROUND JE MET TOUT DEDANS */}
-//       <View
-//         style={{
-//           ...styles.imgBackground,
-//           backgroundColor: getColorByPokemonType(type),
-//         }}>
-//         <ImageBackground
-//           style={styles.heart}
-//           source={require('./../../assets/Images/heart.png')}
-//         />
-
-//         <TouchableOpacity onPress={handleGoBack}>
-//           <ImageBackground
-//             style={styles.imgArrowBack}
-//             source={require('./../../assets/Images/white.png')}
-//             resizeMode="cover"
-//           />
-//         </TouchableOpacity>
-//         <Text style={styles.pokemonName}>{name}</Text>
-//         <Text style={styles.id}>#{String(id).padStart(3, '0')}</Text>
-//         <View style={styles.itemContainer}>
-//           <Text style={styles.typesPokemon}>{type}</Text>
-//         </View>
-//         <ImageBackground
-//           style={styles.imgPokeStyle}
-//           source={require('./../../assets/Images/Element.png')}
-//         />
-//         <ImageBackground
-//           style={styles.imgPokemon}
-//           source={{uri: img}}></ImageBackground>
-//          <BottomSheet/> 
-//         <View style={styles.compnentsContainer}>
-//           <SafeAreaView style={styles.container}>
-        
-//             <View style={styles.parent}>
-//               <View
-//                 style={{
-//                   height: 30,
-//                   width: 400,
-//                   display: 'flex',
-//                   flexDirection: 'row',
-//                 }}>
-//                 <TouchableOpacity
-//                   style={{height: 30, width: 100}}
-//                   onPress={() => {
-//                     handleDisplayTabs(1);
-//                   }}>
-//                   <ButtonsNav text={'About'} />
-//                 </TouchableOpacity>
-
-//                 <TouchableOpacity
-//                   style={{height: 30, width: 100}}
-//                   onPress={() => {
-//                     handleDisplayTabs(2);
-//                   }}>
-//                   <ButtonsNav text={'Base Stats'} />
-//                 </TouchableOpacity>
-
-//                 <TouchableOpacity
-//                   style={{height: 30, width: 100}}
-//                   onPress={() => {
-//                     handleDisplayTabs(3);
-//                   }}>
-//                   <ButtonsNav text={'Evolution'} />
-//                 </TouchableOpacity>
-
-//                 <TouchableOpacity
-//                   style={{height: 30, width: 100}}
-//                   onPress={() => {
-//                     handleDisplayTabs(4);
-//                   }}>
-//                   <ButtonsNav text={'Move'} />
-//                 </TouchableOpacity>
-//               </View>
-//               <View
-//                 style={{
-//                   backgroundColor: 'white',
-//                   height: '100%',
-//                   width: 400,
-//                   display: 'flex',
-//                   paddingHorizontal: 30,
-//                 }}>
-//                 {currentTab === 1 && pokemonData && (
-//                   <About
-//                     id={pokemonData.id}
-//                     height={pokemonData.height}
-//                     weight={pokemonData.weight}
-//                   />
-//                 )}
-
-//                 {currentTab === 2 && pokemonData && (
-//                   <BaseStats
-//                     id={pokemonData.id}
-//                     hp={pokemonData.stats.hp}
-//                     attack={pokemonData.stats.attack}
-//                     defense={pokemonData.stats.defense}
-//                     specialAttck={pokemonData.stats.specialAttack}
-//                     specialDef={pokemonData.stats.specialDefense}
-//                     speed={pokemonData.stats.speed}
-//                     total={
-//                       pokemonData.stats.hp +
-//                       pokemonData.stats.attack +
-//                       pokemonData.stats.defense +
-//                       pokemonData.stats.speed
-//                       // + pokemonData.stats.specialAttck
-//                       // + pokemonData.stats.specialDef
-//                     }
-//                   />
-//                 )}
-//                 {currentTab === 3 && pokemonData && (
-//                   <Evolution id={pokemonData.id} img={img} />
-//                 )}
-
-//                 {currentTab === 4 && pokemonData && (
-//                   <Moves id={pokemonData.id} />
-//                 )}
-//               </View>
-//             </View>
-//           </SafeAreaView>
-//         </View>
-//       </View>
-//     </View>
-//     // </GestureHandlerRootView>
-//   );
-// }
 
 const styles = StyleSheet.create({
 
@@ -327,16 +229,10 @@ const styles = StyleSheet.create({
   },
 
   // flat list
-  container: {
-    flex: 1,
-    backgroundColor:'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   test: {
     zIndex: 1000000,
     width: '100%',
-
     height: 100,
   },
 });
