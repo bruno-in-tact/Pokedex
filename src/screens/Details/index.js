@@ -12,6 +12,11 @@ import BaseStats from './../../components/Details/BaseStats/index';
 import Evolution from './../../components/Details/Evolution/index';
 import Moves from './../../components/Details/Moves/index';
 
+import Animated from 'react-native-reanimated';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import BottomSheet from './../../components/BottomSheet';
+
+
 import {
   ImageBackground,
   FlatList,
@@ -25,9 +30,11 @@ import {
   Button,
   SafeAreaView,
   Alert,
+  Dimensions
 } from 'react-native';
 
 export default function Details() {
+
   const navigation = useNavigation();
   const route = useRoute();
   const {id, name, type, color, img} = route.params;
@@ -39,12 +46,10 @@ export default function Details() {
   const [currentTab, setCurrentTab] = useState(1);
 
   const handleDisplayTabs = i => {
-    // 👇️ toggle shown state
     setCurrentTab(i);
-
-    // 👇️ or simply set it to true
-    // setIsShown(true);
   };
+
+ 
 
   //USE EFFECT FETCHPOKEMONS
   useEffect(() => {
@@ -71,181 +76,152 @@ export default function Details() {
     init();
   }, []);
 
+  const sheetRef = React.useRef(null);
+
+
+
   return (
-    // container view qui prend l'écran entier
-    <View style={{flex: 1, width: '100%', height: '100%'}}>
-      {/* CONTAINER IMG BACKGROUND JE MET TOUT DEDANS */}
-      <View
-        style={{
-          ...styles.imgBackground,
-          backgroundColor: getColorByPokemonType(type),
-        }}>
-        <ImageBackground
-          style={styles.heart}
-          source={require('./../../assets/Images/heart.png')}
-        />
-
-        <TouchableOpacity onPress={handleGoBack}>
-          <ImageBackground
-            style={styles.imgArrowBack}
-            source={require('./../../assets/Images/white.png')}
-            resizeMode="cover"
-          />
-        </TouchableOpacity>
-        <Text style={styles.pokemonName}>{name}</Text>
-        <Text style={styles.id}>#{String(id).padStart(3, '0')}</Text>
-        <View style={styles.itemContainer}>
-          <Text style={styles.typesPokemon}>{type}</Text>
-        </View>
-        <ImageBackground
-          style={styles.imgPokeStyle}
-          source={require('./../../assets/Images/Element.png')}
-        />
-        <ImageBackground
-          style={styles.imgPokemon}
-          source={{uri: img}}></ImageBackground>
-
-        <View style={styles.compnentsContainer}>
-          <SafeAreaView style={styles.container}>
-            <View style={styles.parent}>
-              <View
-                style={{
-                  height: 30,
-                  width: 400,
-                  display: 'flex',
-                  flexDirection: 'row',
-                }}>
-                <TouchableOpacity
-                  style={{height: 30, width: 100}}
-                  onPress={() => {
-                    handleDisplayTabs(1);
-                  }}>
-                  <ButtonsNav text={'About'} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{height: 30, width: 100}}
-                  onPress={() => {
-                    handleDisplayTabs(2);
-                  }}>
-                  <ButtonsNav text={'Base Stats'} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{height: 30, width: 100}}
-                  onPress={() => {
-                    handleDisplayTabs(3);
-                  }}>
-                  <ButtonsNav text={'Evolution'} />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{height: 30, width: 100}}
-                  onPress={() => {
-                    handleDisplayTabs(4);
-                  }}>
-                  <ButtonsNav text={'Move'} />
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  height: '100%',
-                  width: 400,
-                  display: 'flex',
-                  paddingHorizontal: 30,
-                }}>
-                {currentTab === 1 && pokemonData && (
-                  <About
-                    id={pokemonData.id}
-                    height={pokemonData.height}
-                    weight={pokemonData.weight}
-                  />
-                )}
-
-                {currentTab === 2 && pokemonData && (
-                  <BaseStats
-                    id={pokemonData.id}
-                    hp={pokemonData.stats.hp}
-                    attack={pokemonData.stats.attack}
-                    defense={pokemonData.stats.defense}
-                    specialAttck={pokemonData.stats.specialAttack}
-                    specialDef={pokemonData.stats.specialDefense}
-                    speed={pokemonData.stats.speed}
-                    total={
-                      pokemonData.stats.hp +
-                      pokemonData.stats.attack +
-                      pokemonData.stats.defense +
-                      pokemonData.stats.speed
-                      // + pokemonData.stats.specialAttck
-                      // + pokemonData.stats.specialDef
-                    }
-                  />
-                )}
-
-                {currentTab === 3 && pokemonData && (
-                  <Evolution
-                    id={pokemonData.id}
-                 
-                  />
-                )}
-
-                {currentTab === 4 && pokemonData && (
-                  <Moves
-                    id={pokemonData.id}
-              
-                  />
-                )}
-              </View>
-            </View>
-
-            <View>
-              {/* { shouldShow, pokemonData  &&  (
-          <About
-            id={pokemonData.id}
-            height={pokemonData.height}
-            weight={pokemonData.weight}
-          />
-        )} */}
-            </View>
-          </SafeAreaView>
-        </View>
-
-        {/* FIN PREMIERE PARTIE CONTAINER */}
-
-        {/* <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text>Press Here</Text>
-      </TouchableOpacity> */}
-        {/*TEST CALL COMPONENTS */}
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
       </View>
-
-      {/* {pokemonData && (
-        <BaseStats
-          id={pokemonData.id}
-          hp={pokemonData.stats.hp}
-          attack={pokemonData.stats.attack}
-          defense={pokemonData.stats.defense}
-          specialAttck={pokemonData.stats.specialAttack}
-          specialDef={pokemonData.stats.specialDefense}
-          speed={pokemonData.stats.speed}
-          total={
-            pokemonData.stats.hp +
-            pokemonData.stats.attack +
-            pokemonData.stats.defense +
-            pokemonData.stats.speed
-            // + pokemonData.stats.specialAttck
-            // + pokemonData.stats.specialDef
-          }
-        />
-      )}  */}
-
-      {/* {shouldShow && <Evolution />} 
-      {/*TEST RECUPERATION DES DONNEES PART SECONDE CALL API */}
-    </View>
+          <BottomSheet/>
+    </GestureHandlerRootView>
   );
 }
 
+//   return (
+//     // <GestureHandlerRootView style={{flex: 1}}>
+//     // container view qui prend l'écran entier
+//     <View style={{flex: 1, width: '100%', height: '100%'}}>
+//       {/* CONTAINER IMG BACKGROUND JE MET TOUT DEDANS */}
+//       <View
+//         style={{
+//           ...styles.imgBackground,
+//           backgroundColor: getColorByPokemonType(type),
+//         }}>
+//         <ImageBackground
+//           style={styles.heart}
+//           source={require('./../../assets/Images/heart.png')}
+//         />
+
+//         <TouchableOpacity onPress={handleGoBack}>
+//           <ImageBackground
+//             style={styles.imgArrowBack}
+//             source={require('./../../assets/Images/white.png')}
+//             resizeMode="cover"
+//           />
+//         </TouchableOpacity>
+//         <Text style={styles.pokemonName}>{name}</Text>
+//         <Text style={styles.id}>#{String(id).padStart(3, '0')}</Text>
+//         <View style={styles.itemContainer}>
+//           <Text style={styles.typesPokemon}>{type}</Text>
+//         </View>
+//         <ImageBackground
+//           style={styles.imgPokeStyle}
+//           source={require('./../../assets/Images/Element.png')}
+//         />
+//         <ImageBackground
+//           style={styles.imgPokemon}
+//           source={{uri: img}}></ImageBackground>
+//          <BottomSheet/> 
+//         <View style={styles.compnentsContainer}>
+//           <SafeAreaView style={styles.container}>
+        
+//             <View style={styles.parent}>
+//               <View
+//                 style={{
+//                   height: 30,
+//                   width: 400,
+//                   display: 'flex',
+//                   flexDirection: 'row',
+//                 }}>
+//                 <TouchableOpacity
+//                   style={{height: 30, width: 100}}
+//                   onPress={() => {
+//                     handleDisplayTabs(1);
+//                   }}>
+//                   <ButtonsNav text={'About'} />
+//                 </TouchableOpacity>
+
+//                 <TouchableOpacity
+//                   style={{height: 30, width: 100}}
+//                   onPress={() => {
+//                     handleDisplayTabs(2);
+//                   }}>
+//                   <ButtonsNav text={'Base Stats'} />
+//                 </TouchableOpacity>
+
+//                 <TouchableOpacity
+//                   style={{height: 30, width: 100}}
+//                   onPress={() => {
+//                     handleDisplayTabs(3);
+//                   }}>
+//                   <ButtonsNav text={'Evolution'} />
+//                 </TouchableOpacity>
+
+//                 <TouchableOpacity
+//                   style={{height: 30, width: 100}}
+//                   onPress={() => {
+//                     handleDisplayTabs(4);
+//                   }}>
+//                   <ButtonsNav text={'Move'} />
+//                 </TouchableOpacity>
+//               </View>
+//               <View
+//                 style={{
+//                   backgroundColor: 'white',
+//                   height: '100%',
+//                   width: 400,
+//                   display: 'flex',
+//                   paddingHorizontal: 30,
+//                 }}>
+//                 {currentTab === 1 && pokemonData && (
+//                   <About
+//                     id={pokemonData.id}
+//                     height={pokemonData.height}
+//                     weight={pokemonData.weight}
+//                   />
+//                 )}
+
+//                 {currentTab === 2 && pokemonData && (
+//                   <BaseStats
+//                     id={pokemonData.id}
+//                     hp={pokemonData.stats.hp}
+//                     attack={pokemonData.stats.attack}
+//                     defense={pokemonData.stats.defense}
+//                     specialAttck={pokemonData.stats.specialAttack}
+//                     specialDef={pokemonData.stats.specialDefense}
+//                     speed={pokemonData.stats.speed}
+//                     total={
+//                       pokemonData.stats.hp +
+//                       pokemonData.stats.attack +
+//                       pokemonData.stats.defense +
+//                       pokemonData.stats.speed
+//                       // + pokemonData.stats.specialAttck
+//                       // + pokemonData.stats.specialDef
+//                     }
+//                   />
+//                 )}
+//                 {currentTab === 3 && pokemonData && (
+//                   <Evolution id={pokemonData.id} img={img} />
+//                 )}
+
+//                 {currentTab === 4 && pokemonData && (
+//                   <Moves id={pokemonData.id} />
+//                 )}
+//               </View>
+//             </View>
+//           </SafeAreaView>
+//         </View>
+//       </View>
+//     </View>
+//     // </GestureHandlerRootView>
+//   );
+// }
+
 const styles = StyleSheet.create({
+
+
   imgPokeStyle: {
     width: '100%',
     height: 220,
@@ -280,7 +256,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     position: 'relative',
     textAlign: 'center',
- 
   },
   itemContainer: {
     marginLeft: 30,
@@ -354,8 +329,8 @@ const styles = StyleSheet.create({
   // flat list
   container: {
     flex: 1,
-    marginHorizontal: 5,
-    justifyContent: 'space-between',
+    backgroundColor:'black',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   test: {

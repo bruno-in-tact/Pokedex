@@ -15,47 +15,216 @@ import {
   TextInput,
 } from 'react-native';
 
-const Evolution = ({hp, height, description, weight, ...otherprops}) => {
-  console.log('TEST STATS dans about', height);
-
+const Evolution = ({id, img}) => {
   return (
     <View style={styles.about}>
-     <Text>Components EVOLUTION</Text>
+      <Text style={{marginVertical: 15, fontWeight: 'bold'}}>
+        Evolution Chain
+      </Text>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          marginVertical: 10,
+        }}>
+        <ImageBackground
+          style={styles.imgPokeBall}
+          source={require('./../../../assets/Images/Element.png')}
+        />
+        <Image style={styles.imgPokemon} source={{uri: img}}></Image>
+
+        <Image
+          style={{
+            width: 35,
+            height: 20,
+            marginHorizontal: 150,
+            marginVertical: 25,
+          }}
+          source={require('./../../../assets/Images/Vector.png')}
+        />
+        <Text
+          style={{
+            width: 50,
+            height: 20,
+            marginVertical: 25,
+            position: 'absolute',
+            marginHorizontal: 150,
+            marginVertical: 50,
+            fontSize: 14,
+            fontWeight: 'bold',
+          }}>
+          Lvl 16
+        </Text>
+
+        <ImageBackground
+          style={styles.imgPokeBallRight}
+          source={require('./../../../assets/Images/Element.png')}
+        />
+        <Image style={styles.imgPokemonRight} source={{uri: img}}></Image>
+
+        <Image
+          style={{
+            width: 35,
+            height: 20,
+            marginHorizontal: 150,
+            marginVertical: 25,
+          }}
+          source={require('./../../../assets/Images/Vector.png')}
+        />
+      </View>
+      <View style=
+      {{
+        borderBottomColor: 'grey',
+        borderBottomWidth: 0.3,
+        marginVertical: 20
+      }}
+      />
+
+
+<View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          marginVertical: 10,
+        }}>
+        <ImageBackground
+          style={styles.imgPokeBall}
+          source={require('./../../../assets/Images/Element.png')}
+        />
+        <Image style={styles.imgPokemon} source={{uri: img}}></Image>
+
+        <Image
+          style={{
+            width: 35,
+            height: 20,
+            marginHorizontal: 150,
+            marginVertical: 25,
+          }}
+          source={require('./../../../assets/Images/Vector.png')}
+        />
+        <Text
+          style={{
+            width: 50,
+            height: 20,
+            marginVertical: 25,
+            position: 'absolute',
+            marginHorizontal: 150,
+            marginVertical: 50,
+            fontSize: 14,
+            fontWeight: 'bold',
+          }}>
+          Lvl 16
+        </Text>
+
+        <ImageBackground
+          style={styles.imgPokeBallRight}
+          source={require('./../../../assets/Images/Element.png')}
+        />
+        <Image style={styles.imgPokemonRight} source={{uri: img}}></Image>
+
+        <Image
+          style={{
+            width: 35,
+            height: 20,
+            marginHorizontal: 150,
+            marginVertical: 25,
+          }}
+          source={require('./../../../assets/Images/Vector.png')}
+        />
+      </View>
+
+      <Text style={{marginVertical: 20, fontSize:14, fontWeight:'bold'}}>Mega Evolution</Text>
+
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          marginVertical: 10,
+        }}>
+        <ImageBackground
+          style={styles.imgPokeBall}
+          source={require('./../../../assets/Images/Element.png')}
+        />
+        <Image style={styles.imgPokemon} source={{uri: img}}></Image>
+
+        <Image
+          style={{
+            width: 35,
+            height: 20,
+            marginHorizontal: 150,
+            marginVertical: 25,
+          }}
+          source={require('./../../../assets/Images/Vector.png')}
+        />
+        <Text
+          style={{
+            width: 50,
+            height: 20,
+            marginVertical: 25,
+            position: 'absolute',
+            marginHorizontal: 150,
+            marginVertical: 50,
+            fontSize: 14,
+            fontWeight: 'bold',
+          }}>
+          Lvl 16
+        </Text>
+
+        <ImageBackground
+          style={styles.imgPokeBallRight}
+          source={require('./../../../assets/Images/Element.png')}
+        />
+        <Image style={styles.imgPokemonRight} source={{uri: img}}></Image>
+
+        <Image
+          style={{
+            width: 35,
+            height: 20,
+            marginHorizontal: 150,
+            marginVertical: 25,
+          }}
+          source={require('./../../../assets/Images/Vector.png')}
+        />
+      </View>
+
+
+
     </View>
   );
 };
 export default Evolution;
 const styles = StyleSheet.create({
-  component: {
-    width: '100%',
+  imgPokeBall: {
+    height: 80,
+    width: 140,
+    left: -60,
+    position: 'absolute',
   },
-  about: {
-    height: '100%',
-    width: '100%',
-  },
-  text: {
-    marginHorizontal: '10%',
-  },
-
-  container: {
-    flex: 1,
-    flexWrap: 'wrap',
-    marginVertical: 30,
-    width: '80%',
-    borderRadius: 15,
-    borderColor: 'grey',
-    borderWidth: 1,
-    marginHorizontal: '10%',
-    padding: 15,
-    opacity: 0.5,
-    fontSize: 15,
-    fontWeight: 'bold',
+  imgPokemon: {
+    width: 76,
+    height: 71,
+    zIndex: 1,
+    position: 'absolute',
+    left: 0,
   },
 
-  data: {
-    color: 'black',
-    fontSize: 15,
-    padding: 7,
-    fontWeight: 'bold',
+  imgPokeBallRight: {
+    height: 80,
+    width: 140,
+    right: -10,
+    position: 'absolute',
+  },
+  imgPokemonRight: {
+    width: 76,
+    height: 71,
+    zIndex: 1,
+    position: 'absolute',
+    right: 0,
   },
 });
