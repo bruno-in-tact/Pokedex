@@ -43,7 +43,7 @@ const BaseStats = ({
 
   const width = counter.interpolate({
     inputRange: [0, 100],
-    outputRange: ['0%', '100%'],
+    outputRange: [0, 100],
     extrapolate: 'clamp',
   });
 
@@ -141,7 +141,7 @@ const BaseStats = ({
           <Text style={styles.stats}>{total}</Text>
         </View>
         <View style={styles.container}>
-          <Text style={styles.text}>Type defenses</Text>
+          <Text style={{...styles.text, marginTop:30,}}>Type defenses</Text>
         </View>
       </View>
     </View>
@@ -152,25 +152,21 @@ export default BaseStats;
 
 const styles = StyleSheet.create({
   BaseStats: {
-    width: '100%',
-    backgroundColor: 'white',
-    top: 300,
     height: '100%',
-    padding: 50,
-    left: 0,
-    position: 'absolute',
+    padding: 5,
   },
   progressBar: {
     height: 6,
-    width: '45%',
+    width: '35%',
     backgroundColor: 'grey',
     borderColor: '#000',
     borderWidth: 2,
     borderRadius: 5,
-    position: 'absolute',
-    right: 100,
     marginTop: 5,
     opacity: 0.4,
+    position:'absolute',
+    right:170,
+    
   },
   text: {
     fontSize: 15,
@@ -183,22 +179,19 @@ const styles = StyleSheet.create({
 
   menu: {
     position: 'absolute',
-    left: -20,
+    left: 0,
     color: 'grey',
   },
 
   stats: {
     position: 'relative',
-    left: -115,
-    fontWeight: 'bold',
+    left: -140,
     marginTop: 5,
   },
 
   container: {
     flex: 1,
     flexWrap: 'wrap',
-    marginVertical: 30,
-    padding: 5,
     fontSize: 15,
     fontWeight: 'bold',
   },

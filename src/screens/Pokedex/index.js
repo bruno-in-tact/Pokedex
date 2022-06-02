@@ -42,20 +42,20 @@ export default function Pokedex() {
 
   const arrayPokemonsInformations = [...allPokemons];
 
-  const handleLoadMore = () => {
-    if (!isLoading) {
-      // setPageCurrent(pageCurrent + 1);
-      // setIsLoading(true);
-      () => fetchPokemons();
-    }
-  };
+  // const handleLoadMore = () => {
+  //   if (!isLoading) {
+  //      setPageCurrent(pageCurrent + 1);
+  //      setIsLoading(true);
+  //     () => fetchPokemons();
+  //   }
+  // };
 
-  const renderFooter = () => {
-    return isLoading  ? (
+  // const renderFooter = () => {
+  //   return isLoading  ? (
 
-      <ActivityIndicator size="large" />
-    ) : null;
-  }
+  //     <ActivityIndicator size="large" />
+  //   ) : null;
+  // }
 
   return (
     <View
@@ -94,8 +94,8 @@ export default function Pokedex() {
         data={allPokemons}
         keyExtractor={item => item.name}
         showsVerticalScrollIndicator={false}
-        onEndReached={handleLoadMore}
-        ListFooterComponent={renderFooter}
+        // onEndReached={handleLoadMore}
+        // ListFooterComponent={renderFooter}
         onEndReachedThreshold={0}
         renderItem={({item, index}) => <Pokemons key={index} item={item} />}
       />

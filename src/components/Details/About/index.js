@@ -41,7 +41,31 @@ const About = ({hp, height, description, weight, ...otherprops}) => {
         </View>
       </View>
 
-      <Text style={styles.text}>Breeding</Text>
+      <Text style={styles.title}>Breeding</Text>
+      <View style={{display:'flex', flexDirection:'row', justifyContent:'space-between', width:'70%', marginVertical:10}}>
+      <Text style ={{fontSize:15, fontWeight:'bold', opacity:0.5}}>Gender</Text>
+      <Image
+         style={styles.imgGender}
+         source={require('./../../../assets/Images/genderMale.png')}
+      />
+      <Text style={{marginLeft:-30}}> 100%</Text>
+      <Image
+         style={styles.imgGender}
+         source={require('./../../../assets/Images/genderFemale.png')}
+      />
+      <Text style={{marginLeft:-30}}> 90%</Text>
+      </View>
+
+      <View style={{display:'flex', flexDirection:'row', justifyContent:'space-between', width:'50%', marginVertical:10}}>
+      <Text style ={{fontSize:15, fontWeight:'bold', opacity:0.5}}>Egg Groups</Text>
+      <Text style={{marginLeft:-30}}> Monster</Text>  
+      </View>
+
+      <View style={{display:'flex', flexDirection:'row', justifyContent:'space-between', width:'45%', marginVertical:10}}>
+      <Text style ={{fontSize:15, fontWeight:'bold', opacity:0.5}}>Egg Cycle</Text>
+      <Text style={{marginLeft:-30}}> Grass</Text>  
+      </View>
+
     </View>
   );
 };
@@ -49,35 +73,42 @@ export default About;
 const styles = StyleSheet.create({
   component: {
     width: '100%',
-    marginTop: 60,
+  },
+
+  imgGender: {
+   
   },
   about: {
+    marginVertical:15,
     height: '100%',
     width: '100%',
+
   },
   text: {
-    marginHorizontal: '10%',
+
+  },
+  title: {
+    fontSize: 18,
+    color:'black',
+    fontWeight:'bold',
   },
 
   container: {
-    flex: 1,
-    flexWrap: 'wrap',
-    marginVertical: 30,
-    width: '80%',
+    marginVertical: 20,
+    width: '90%',
     borderRadius: 15,
     borderColor: 'grey',
-    borderWidth: 1,
-    marginHorizontal: '10%',
+    borderWidth: 0.2,
+    marginHorizontal: '5%',
     padding: 15,
-    opacity: 0.5,
     fontSize: 15,
     fontWeight: 'bold',
+ 
   },
 
   data: {
     color: 'black',
     fontSize: 15,
     padding: 7,
-    fontWeight: 'bold',
   },
 });

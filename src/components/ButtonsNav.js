@@ -1,19 +1,26 @@
-import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import React, {useState, useEffect, useCallback} from 'react';
+import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+
+
+
 
 const ButtonsNav = ({ text }) => {
+  const [shouldShow, setShouldShow] = useState(true);
+
   return (
-    <TouchableOpacity style={styles.button}>
+    <View style={styles.button}>
       <Text style={styles.text}>{text}</Text>
-    </TouchableOpacity>
+    </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    width: "25%",
-    top:60,
-
+    //width: "33%",
+  //  top:60,
+  //  marginHorizontal:'10%'
+  zIndex:100000,
   },
   text: {
     fontSize: 13,

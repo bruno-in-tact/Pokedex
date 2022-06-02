@@ -2,15 +2,15 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {textColor} from './src/assets/colors';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import getColorByPokemonType from './../../utils/pokemonTypeColor';
-import ButtonsNav from './../../components/ButtonsNav';
 import {fetchPokemons} from './../../cors/pokeApi';
-import {pokemonInfos} from './../../cors/pokeApi';
-import Pokemons from './../../components/Pokemons';
+import {pokeSpecies} from './../../cors/pokeApi';
 
+import ButtonsNav from './../../components/ButtonsNav';
+import Pokemons from './../../components/Pokemons';
 import About from './../../components/Details/About/index';
 import BaseStats from './../../components/Details/BaseStats/index';
-// import Evolution from '/../../components/Details/Evolution/index'
-// import Moves from '/../../components/Details/Moves/index'
+import Evolution from './../../components/Details/Evolution/index';
+import Moves from './../../components/Details/Moves/index';
 
 import {
   ImageBackground,
@@ -33,136 +33,213 @@ export default function Details() {
   const {id, name, type, color, img} = route.params;
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
   const [pokemonData, setPokemonData] = useState(undefined);
-  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] = useState(undefined);
-  const [active, setActive] = useState('about');
-  const [show, setShow] = useState(false);
+  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] =
+    useState(undefined);
 
+  const [currentTab, setCurrentTab] = useState(1);
+
+  const handleDisplayTabs = i => {
+    // 👇️ toggle shown state
+    setCurrentTab(i);
+
+    // 👇️ or simply set it to true
+    // setIsShown(true);
+  };
 
   //USE EFFECT FETCHPOKEMONS
   useEffect(() => {
     console.log('test fetch all INFORMATIONS DANS LA PAGE DETAILS');
     const init = async () => {
       const allPokemons = await fetchPokemons();
-      const myPokemon = allPokemons.find(poke => (poke.number ==id));
+      const myPokemon = allPokemons.find(poke => poke.number == id);
       console.log('mon pokemon :', myPokemon);
       console.log('mon pokeimon ID :', id);
       // console.log('mon pokeimon special :', myPokemon.stats.special.attack );
       setPokemonData(myPokemon);
-
     };
     init();
   }, []);
-
 
   //USE EFFECT POKEMONSINFOS
   useEffect(() => {
     console.log('test POKEMONiNFO LA PAGE DETAILS');
     const init = async () => {
-      const allPokemons = await pokemonInfos();
+      const allPokemons = await pokeSpecies(id);
       setPokemonInfoDescritpion(pokemonInfoDescritpion);
+      consle.log('test descritpion de mon pokemon', myPokemonDescription);
     };
     init();
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}>
-      <TouchableOpacity onPress={handleGoBack}>
-        <ImageBackground
-          style={styles.imgArrowBack}
-          source={require('./../../assets/Images/white.png')}
-          resizeMode="cover"
-        />
-      </TouchableOpacity>
-      <ImageBackground />
-
-      <ImageBackground
-        style={styles.heart}
-        source={require('./../../assets/Images/heart.png')}
-      />
+    // container view qui prend l'écran entier
+    <View style={{flex: 1, width: '100%', height: '100%'}}>
+      {/* CONTAINER IMG BACKGROUND JE MET TOUT DEDANS */}
       <View
         style={{
           ...styles.imgBackground,
           backgroundColor: getColorByPokemonType(type),
         }}>
+        <ImageBackground
+          style={styles.heart}
+          source={require('./../../assets/Images/heart.png')}
+        />
+
+        <TouchableOpacity onPress={handleGoBack}>
+          <ImageBackground
+            style={styles.imgArrowBack}
+            source={require('./../../assets/Images/white.png')}
+            resizeMode="cover"
+          />
+        </TouchableOpacity>
         <Text style={styles.pokemonName}>{name}</Text>
-        <Text style={styles.id}>
-          {'#00'}
-          {id}
-        </Text>
+        <Text style={styles.id}>#{String(id).padStart(3, '0')}</Text>
         <View style={styles.itemContainer}>
           <Text style={styles.typesPokemon}>{type}</Text>
         </View>
-      </View>
-      <ImageBackground
-        style={styles.imgPokemon}
-        source={{uri: img}}></ImageBackground>
+        <ImageBackground
+          style={styles.imgPokeStyle}
+          source={require('./../../assets/Images/Element.png')}
+        />
+        <ImageBackground
+          style={styles.imgPokemon}
+          source={{uri: img}}></ImageBackground>
 
-      <View style={styles.compnentsContainer}>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.parent}>
-            {/* <Button title={'About'} onPress={() => setShow(!show) }  style={styles.button}/>
-      {show && <About />} */}
+        <View style={styles.compnentsContainer}>
+          <SafeAreaView style={styles.container}>
+            <View style={styles.parent}>
+              <View
+                style={{
+                  height: 30,
+                  width: 400,
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}>
+                <TouchableOpacity
+                  style={{height: 30, width: 100}}
+                  onPress={() => {
+                    handleDisplayTabs(1);
+                  }}>
+                  <ButtonsNav text={'About'} />
+                </TouchableOpacity>
 
-            <ButtonsNav onPress={() => setActive('about')} text={'About'} />
-            <ButtonsNav
-              onPress={() => setActive('BaseStats')}
-              text={'BaseStats'}
-            />
-            <ButtonsNav text={'Evolution'} />
-            <ButtonsNav text={'Moves'} />
-          </View>
-        </SafeAreaView>
-        {/*TEST CALL COMPONENTS */}
-        {/* <View style={{width: '100%', height: 500}}>
-          {active === 'about' && <About 
-               id={pokemonData.id}
-               height={pokemonData.height}
-               weight={pokemonData.weight}
-                />}
-          {active === 'BaseStats' && <BaseStats />}
-        </View> */}
-        {/* <FlatList
-          style={{}}
-          contentContainerStyle={styles.container}
-          numColumns={1}
-          data={allPokemons}
-          keyExtractor={item => item.name}
-          renderItem={({item, index}) => <About key={index} item={item} />}
-        /> */}
+                <TouchableOpacity
+                  style={{height: 30, width: 100}}
+                  onPress={() => {
+                    handleDisplayTabs(2);
+                  }}>
+                  <ButtonsNav text={'Base Stats'} />
+                </TouchableOpacity>
 
-        {pokemonData &&  (
+                <TouchableOpacity
+                  style={{height: 30, width: 100}}
+                  onPress={() => {
+                    handleDisplayTabs(3);
+                  }}>
+                  <ButtonsNav text={'Evolution'} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{height: 30, width: 100}}
+                  onPress={() => {
+                    handleDisplayTabs(4);
+                  }}>
+                  <ButtonsNav text={'Move'} />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  height: '100%',
+                  width: 400,
+                  display: 'flex',
+                  paddingHorizontal: 30,
+                }}>
+                {currentTab === 1 && pokemonData && (
+                  <About
+                    id={pokemonData.id}
+                    height={pokemonData.height}
+                    weight={pokemonData.weight}
+                  />
+                )}
+
+                {currentTab === 2 && pokemonData && (
+                  <BaseStats
+                    id={pokemonData.id}
+                    hp={pokemonData.stats.hp}
+                    attack={pokemonData.stats.attack}
+                    defense={pokemonData.stats.defense}
+                    specialAttck={pokemonData.stats.specialAttack}
+                    specialDef={pokemonData.stats.specialDefense}
+                    speed={pokemonData.stats.speed}
+                    total={
+                      pokemonData.stats.hp +
+                      pokemonData.stats.attack +
+                      pokemonData.stats.defense +
+                      pokemonData.stats.speed
+                      // + pokemonData.stats.specialAttck
+                      // + pokemonData.stats.specialDef
+                    }
+                  />
+                )}
+
+                {currentTab === 3 && pokemonData && (
+                  <Evolution
+                    id={pokemonData.id}
+                 
+                  />
+                )}
+
+                {currentTab === 4 && pokemonData && (
+                  <Moves
+                    id={pokemonData.id}
+              
+                  />
+                )}
+              </View>
+            </View>
+
+            <View>
+              {/* { shouldShow, pokemonData  &&  (
           <About
             id={pokemonData.id}
             height={pokemonData.height}
             weight={pokemonData.weight}
           />
-        )}
+        )} */}
+            </View>
+          </SafeAreaView>
+        </View>
 
+        {/* FIN PREMIERE PARTIE CONTAINER */}
+
+        {/* <TouchableOpacity style={styles.button} onPress={onPress}>
+        <Text>Press Here</Text>
+      </TouchableOpacity> */}
+        {/*TEST CALL COMPONENTS */}
       </View>
-        {pokemonData && (
-          <BaseStats
-            id={pokemonData.id}
-            hp={pokemonData.stats.hp}
-            attack={pokemonData.stats.attack}
-            defense={pokemonData.stats.defense}
-            specialAttck={pokemonData.stats.specialAttack}
-             specialDef={pokemonData.stats.specialDefense}
-            speed={pokemonData.stats.speed}
-            total={pokemonData.stats.hp 
-              + pokemonData.stats.attack
-              + pokemonData.stats.defense
-              + pokemonData.stats.speed
-             // + pokemonData.stats.specialAttck
-             // + pokemonData.stats.specialDef
-             }
-          />
-        )}
 
+      {/* {pokemonData && (
+        <BaseStats
+          id={pokemonData.id}
+          hp={pokemonData.stats.hp}
+          attack={pokemonData.stats.attack}
+          defense={pokemonData.stats.defense}
+          specialAttck={pokemonData.stats.specialAttack}
+          specialDef={pokemonData.stats.specialDefense}
+          speed={pokemonData.stats.speed}
+          total={
+            pokemonData.stats.hp +
+            pokemonData.stats.attack +
+            pokemonData.stats.defense +
+            pokemonData.stats.speed
+            // + pokemonData.stats.specialAttck
+            // + pokemonData.stats.specialDef
+          }
+        />
+      )}  */}
 
-
+      {/* {shouldShow && <Evolution />} 
       {/*TEST RECUPERATION DES DONNEES PART SECONDE CALL API */}
     </View>
   );
@@ -170,10 +247,12 @@ export default function Details() {
 
 const styles = StyleSheet.create({
   imgPokeStyle: {
-    position: 'absolute',
-    right: 0,
-    width: 249,
-    height: 290,
+    width: '100%',
+    height: 220,
+    alignItems: 'center',
+    flex: 1,
+    opacity: 0.5,
+    marginHorizontal: -80,
   },
   button: {
     width: 100,
@@ -183,16 +262,16 @@ const styles = StyleSheet.create({
 
   parent: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    top: -20,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    paddingTop: 40,
   },
   compnentsContainer: {
     width: '100%',
+    height: 500,
     borderRadius: 20,
+    top: -50,
     backgroundColor: 'white',
-    top: 300,
-    position: 'absolute',
   },
 
   typesPokemon: {
@@ -201,6 +280,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     position: 'relative',
     textAlign: 'center',
+ 
   },
   itemContainer: {
     marginLeft: 30,
@@ -223,9 +303,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
-    top: 87,
-    position: 'absolute',
-    marginRight: 10,
+    top: 35,
+    position: 'relative',
+    marginLeft: 'auto',
   },
 
   pokemonName: {
@@ -241,41 +321,34 @@ const styles = StyleSheet.create({
 
   imgBackground: {
     width: '100%',
-    height: 330,
-    position: 'absolute',
-    zIndex: -1111,
+    top: 0,
   },
   imgPokemon: {
-    position: 'absolute',
     width: 200,
     height: 224,
-    top: 130,
-    zIndex: 100000,
-    alignItems: 'center',
     marginHorizontal: 100,
+    zIndex: 1,
   },
   imgArrowBack: {
-    position: 'absolute',
     left: 20,
     top: 30,
     width: 22,
     height: 13,
-    zIndex: 100,
+    zIndex: 10,
   },
   heart: {
+    // pourquoi absolute obligatoire? à voir:
     position: 'absolute',
     right: 28,
     width: 16,
     height: 18,
     top: 30,
+    zIndex: 10,
   },
   title: {
-    position: 'absolute',
     fontSize: 32,
     fontWeight: 'bold',
     width: 316,
-    top: 125,
-    left: -90,
   },
 
   // flat list
@@ -284,5 +357,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  test: {
+    zIndex: 1000000,
+    width: '100%',
+
+    height: 100,
   },
 });

@@ -35,7 +35,6 @@ const Pokemons = ({key, item}) => {
           id: item.number,
           type: item.types[0],
           color: item.types[0],
-          //  type : item.types.map(t=>t.type.item.name),
           img: item.img,
         })
       }>

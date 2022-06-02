@@ -30,7 +30,7 @@ export default class PokemonAllInformations extends Component {
 }
 
 export async function fetchAllFromPokemons() {
-  const {pokemonIndex} = this.props.match.params;
+  const {pokemonIndex} = "";
 
   // Urls for pokemon information
   const pokemonUrl = await request(`/pokemon/${pokemonIndex}/`);
