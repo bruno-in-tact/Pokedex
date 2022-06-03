@@ -1,4 +1,9 @@
-import React, {useCallback, useEffect, useImperativeHandle, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 
 import {textColor} from './src/assets/colors';
@@ -25,184 +30,132 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import {
-    ImageBackground,
-    FlatList,
-    View,
-    Text,
-    ScrollView,
-    Image,
-    Dimensions,
-    TouchableOpacity,
-    StyleSheet,
-    TextInput,
-    Button,
-    SafeAreaView,
-    Alert,
-  } from 'react-native';
-
+  ImageBackground,
+  FlatList,
+  View,
+  Text,
+  ScrollView,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  Button,
+  SafeAreaView,
+  Alert,
+} from 'react-native';
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
-
 const BottomSheet = () => {
-
-
-
   const navigation = useNavigation();
   const route = useRoute();
-  const {id, name, type, color, img} = route.params;
+  const {currentPokemon} = route.params;
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
-  const [pokemonData, setPokemonData] = useState(undefined);
-  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] =
     useState(undefined);
-
   const [currentTab, setCurrentTab] = useState(1);
-
   const handleDisplayTabs = i => {
     setCurrentTab(i);
   };
 
- 
-
-  //USE EFFECT FETCHPOKEMONS
-  useEffect(() => {
-    console.log('test fetch all INFORMATIONS DANS LA PAGE DETAILS');
-    const init = async () => {
-      const allPokemons = await fetchPokemons();
-      const myPokemon = allPokemons.find(poke => poke.number == id);
-      console.log('mon pokemon :', myPokemon);
-      console.log('mon pokeimon ID :', id);
-      // console.log('mon pokeimon special :', myPokemon.stats.special.attack );
-      setPokemonData(myPokemon);
-    };
-    init();
-  }, []);
-
-  //USE EFFECT POKEMONSINFOS
-  useEffect(() => {
-    console.log('test POKEMONiNFO LA PAGE DETAILS');
-    const init = async () => {
-      const allPokemons = await pokeSpecies(id);
-      setPokemonInfoDescritpion(pokemonInfoDescritpion);
-      consle.log('test descritpion de mon pokemon', myPokemonDescription);
-    };
-    init();
-  }, []);
-
-  const sheetRef = React.useRef(null);
-
-
-
-
-
-
-
-
-
-const translateY = useSharedValue(0);
-
-  const gesture = Gesture.Pan().onUpdate((event) =>{
-      translateY.value = event.translationY;
+  const translateY = useSharedValue(0);
+  const gesture = Gesture.Pan().onUpdate(event => {
+    translateY.value = event.translationY;
   });
 
-const rBottomSheetStyle = useAnimatedStyle(() => {
+  const rBottomSheetStyle = useAnimatedStyle(() => {
     return {
-         transform: [{translateY: translateY.value}],
-    }; 
-});
+      transform: [{translateY: translateY.value}],
+    };
+  });
   return (
     <GestureDetector gesture={gesture}>
-    <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
-      <View style={styles.line} />
-      <SafeAreaView style={styles.container}>
-        
-        <View style={styles.parent}>
-          <View
-            style={{
-              height: 30,
-              width: 400,
-              display: 'flex',
-              flexDirection: 'row',
-            }}>
-            <TouchableOpacity
-              style={{height: 30, width: 100}}
-              onPress={() => {
-                handleDisplayTabs(1);
+      <Animated.View style={[styles.bottomSheetContainer, rBottomSheetStyle]}>
+        <View style={styles.line} />
+        <SafeAreaView style={styles.container}>
+          <View style={styles.parent}>
+            <View
+              style={{
+                height: 30,
+                width: 400,
+                display: 'flex',
+                flexDirection: 'row',
               }}>
-              <ButtonsNav text={'About'} />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{height: 30, width: 100}}
+                onPress={() => {
+                  handleDisplayTabs(1);
+                }}>
+                <ButtonsNav text={'About'} />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{height: 30, width: 100}}
-              onPress={() => {
-                handleDisplayTabs(2);
-              }}>
-              <ButtonsNav text={'Base Stats'} />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{height: 30, width: 100}}
+                onPress={() => {
+                  handleDisplayTabs(2);
+                }}>
+                <ButtonsNav text={'Base Stats'} />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{height: 30, width: 100}}
-              onPress={() => {
-                handleDisplayTabs(3);
-              }}>
-              <ButtonsNav text={'Evolution'} />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={{height: 30, width: 100}}
+                onPress={() => {
+                  handleDisplayTabs(3);
+                }}>
+                <ButtonsNav text={'Evolution'} />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{height: 30, width: 100}}
-              onPress={() => {
-                handleDisplayTabs(4);
+              <TouchableOpacity
+                style={{height: 30, width: 100}}
+                onPress={() => {
+                  handleDisplayTabs(4);
+                }}>
+                <ButtonsNav text={'Move'} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                backgroundColor: 'white',
+                height: '100%',
+                width: 400,
+                display: 'flex',
+                paddingHorizontal: 30,
               }}>
-              <ButtonsNav text={'Move'} />
-            </TouchableOpacity>
+              {currentTab === 1 && (
+                <About
+                  height={currentPokemon.height}
+                  weight={currentPokemon.weight}
+                 abilities={currentPokemon.abilities.map(a =>a.abilities)}
+                />
+              )}
+
+              {currentTab === 2 && (
+                <BaseStats
+                  hp={currentPokemon.stats.hp}
+                  attack={currentPokemon.stats.attack}
+                  defense={currentPokemon.stats.defense}
+                  specialAttck={currentPokemon.stats['special-attack']}
+                  specialDef={currentPokemon.stats['special-defense']}
+                  speed={currentPokemon.stats.speed}
+                  total={
+                    currentPokemon.stats.hp +
+                    currentPokemon.stats.attack +
+                    currentPokemon.stats.defense +
+                    currentPokemon.stats.speed +
+                    currentPokemon.stats['special-attack'] +
+                    currentPokemon.stats['special-defense']
+                  }
+                />
+              )}
+              {currentTab === 3 && (
+                <Evolution id={currentPokemon.number} img={currentPokemon.img} />
+              )}
+
+              {currentTab === 4 &&  <Moves id={currentPokemon.number} />}
+            </View>
           </View>
-          <View
-            style={{
-              backgroundColor: 'white',
-              height: '100%',
-              width: 400,
-              display: 'flex',
-              paddingHorizontal: 30,
-            }}>
-            {currentTab === 1 && pokemonData && (
-              <About
-                id={pokemonData.id}
-                height={pokemonData.height}
-                weight={pokemonData.weight}
-              />
-            )}
-
-            {currentTab === 2 && pokemonData && (
-              <BaseStats
-                id={pokemonData.id}
-                hp={pokemonData.stats.hp}
-                attack={pokemonData.stats.attack}
-                defense={pokemonData.stats.defense}
-                specialAttck={pokemonData.stats.specialAttack}
-                specialDef={pokemonData.stats.specialDefense}
-                speed={pokemonData.stats.speed}
-                total={
-                  pokemonData.stats.hp +
-                  pokemonData.stats.attack +
-                  pokemonData.stats.defense +
-                  pokemonData.stats.speed
-                  // + pokemonData.stats.specialAttck
-                  // + pokemonData.stats.specialDef
-                }
-              />
-            )}
-            {currentTab === 3 && pokemonData && (
-              <Evolution id={pokemonData.id} img={img} />
-            )}
-
-            {currentTab === 4 && pokemonData && (
-              <Moves id={pokemonData.id} />
-            )}
-          </View>
-        </View>
-      </SafeAreaView>
-    </Animated.View>
-  </GestureDetector>
-  
+        </SafeAreaView>
+      </Animated.View>
+    </GestureDetector>
   );
 };
 
@@ -212,7 +165,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
     position: 'absolute',
-    top: SCREEN_HEIGHT/ 1.5,
+    top: SCREEN_HEIGHT / 2.4,
     borderRadius: 25,
   },
   line: {

@@ -15,8 +15,8 @@ import {
   TextInput,
 } from 'react-native';
 
-const About = ({hp, height, description, weight, ...otherprops}) => {
-  console.log('TEST STATS dans about', height);
+const About = ({hp, height, description, weight, abilities, ...otherprops}) => {
+  console.log('TEST STATS dans aboutdzdzdzedzefezfezDZEZFZF', abilities);
 
   return (
     <View style={styles.about}>
@@ -66,6 +66,14 @@ const About = ({hp, height, description, weight, ...otherprops}) => {
       <Text style={{marginLeft:-30}}> Grass</Text>  
       </View>
 
+
+      <Text style={styles.title}>Abilities</Text>
+
+      <View style={{display:'flex', flexDirection:'row', justifyContent:'space-between', width:'45%', marginVertical:10}}>
+      <Text style={{marginLeft:-30}}>{abilities}</Text>  
+      </View>
+
+
     </View>
   );
 };
@@ -91,6 +99,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color:'black',
     fontWeight:'bold',
+    marginVertical: 10,
   },
 
   container: {

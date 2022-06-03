@@ -59,7 +59,7 @@ const BaseStats = ({
     <View style={styles.BaseStats}>
       <View style={styles.container}>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View
               style={
@@ -71,7 +71,13 @@ const BaseStats = ({
           <Text style={styles.stats}>{hp}</Text>
         </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        
+
+
+
+
+
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View
               style={
@@ -82,8 +88,10 @@ const BaseStats = ({
           <Text style={styles.menu}>Attack</Text>
           <Text style={styles.stats}>{attack}</Text>
         </View>
+        
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View
               style={
@@ -95,7 +103,7 @@ const BaseStats = ({
           <Text style={styles.stats}>{defense}</Text>
         </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View
               style={
@@ -107,7 +115,7 @@ const BaseStats = ({
           <Text style={styles.stats}>{specialAttck}</Text>
         </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View
               style={
@@ -118,7 +126,7 @@ const BaseStats = ({
           <Text style={styles.menu}>Sp.Def</Text>
           <Text style={styles.stats}>{specialDef}</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View
               style={
@@ -129,7 +137,7 @@ const BaseStats = ({
           <Text style={styles.menu}>Speed</Text>
           <Text style={styles.stats}>{speed}</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View
               style={
@@ -153,11 +161,11 @@ export default BaseStats;
 const styles = StyleSheet.create({
   BaseStats: {
     height: '100%',
-    padding: 5,
+    padding: 1,
   },
   progressBar: {
     height: 6,
-    width: '35%',
+    width: '55%',
     backgroundColor: 'grey',
     borderColor: '#000',
     borderWidth: 2,
@@ -165,7 +173,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     opacity: 0.4,
     position:'absolute',
-    right:170,
+    right:10,
     
   },
   text: {
@@ -178,15 +186,15 @@ const styles = StyleSheet.create({
   },
 
   menu: {
-    position: 'absolute',
     left: 0,
     color: 'grey',
+    position:'absolute',
   },
 
+
   stats: {
-    position: 'relative',
-    left: -140,
     marginTop: 5,
+    right: 70,
   },
 
   container: {

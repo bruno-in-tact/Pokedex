@@ -16,7 +16,6 @@ import Animated from 'react-native-reanimated';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet from './../../components/BottomSheet';
 
-
 import {
   ImageBackground,
   FlatList,
@@ -30,100 +29,87 @@ import {
   Button,
   SafeAreaView,
   Alert,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 
-export default function Details() {
+const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
+export default function Details() {
   const navigation = useNavigation();
   const route = useRoute();
-  const {id, name, type, color, img} = route.params;
+  const { currentPokemon} = route.params;
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
   const [pokemonData, setPokemonData] = useState(undefined);
   const [pokemonInfoDescritpion, setPokemonInfoDescritpion] =
     useState(undefined);
 
-  const [currentTab, setCurrentTab] = useState(1);
-
-  const handleDisplayTabs = i => {
-    setCurrentTab(i);
-  };
-
  
+  console.log('JE TEST MON OBJECT POKEMONS', currentPokemon);
+  console.log('currentPokemon.name', currentPokemon.name);
 
-  //USE EFFECT FETCHPOKEMONS
-  useEffect(() => {
-    console.log('test fetch all INFORMATIONS DANS LA PAGE DETAILS');
-    const init = async () => {
-      const allPokemons = await fetchPokemons();
-      const myPokemon = allPokemons.find(poke => poke.number == id);
-      console.log('mon pokemon :', myPokemon);
-      console.log('mon pokeimon ID :', id);
-      // console.log('mon pokeimon special :', myPokemon.stats.special.attack );
-      setPokemonData(myPokemon);
-    };
-    init();
-  }, []);
+
 
   //USE EFFECT POKEMONSINFOS
   useEffect(() => {
-    console.log('test POKEMONiNFO LA PAGE DETAILS');
+    console.log('JE FETCH POKEMONSPECIES DETAILS');
     const init = async () => {
-      const allPokemons = await pokeSpecies(id);
+      const allPokemons = await pokeSpecies(currentPokemon.number);
       setPokemonInfoDescritpion(pokemonInfoDescritpion);
-      consle.log('test descritpion de mon pokemon', myPokemonDescription);
+      //consle.log('test descritpion de mon pokemon', myPokemonDescription);
     };
     init();
   }, []);
 
-  const sheetRef = React.useRef(null);
-
-
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{flex: 1, backgroundColor: 'white'}}>
       <View style={styles.container}>
+        <View
+          style={{
+            ...styles.imgBackground,
+            backgroundColor: getColorByPokemonType(currentPokemon.types[0]),
+          }}>
+          <ImageBackground
+            style={styles.heart}
+            source={require('./../../assets/Images/heart.png')}
+          />
 
-      <View
-    style={{
-      ...styles.imgBackground,
-      backgroundColor: getColorByPokemonType(type),
-    }}>
-    <ImageBackground
-      style={styles.heart}
-      source={require('./../../assets/Images/heart.png')}
-    />
-
-    <TouchableOpacity onPress={handleGoBack}>
-      <ImageBackground
-        style={styles.imgArrowBack}
-        source={require('./../../assets/Images/white.png')}
-        resizeMode="cover"
-      />
-    </TouchableOpacity>
-    <Text style={styles.pokemonName}>{name}</Text>
-    <Text style={styles.id}>#{String(id).padStart(3, '0')}</Text>
-    <View style={styles.itemContainer}>
-      <Text style={styles.typesPokemon}>{type}</Text>
-    </View>
-    <ImageBackground
-      style={styles.imgPokeStyle}
-      source={require('./../../assets/Images/Element.png')}
-    />
-    <ImageBackground
-      style={styles.imgPokemon}
-      source={{uri: img}}></ImageBackground>
-  </View>
-
+          <TouchableOpacity onPress={handleGoBack}>
+            <ImageBackground
+              style={styles.imgArrowBack}
+              source={require('./../../assets/Images/white.png')}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+          <Text style={styles.pokemonName}>{currentPokemon.name}</Text>
+          <Text style={styles.id}>
+            #{String(currentPokemon.number).padStart(3, '0')}
+          </Text>
+          <View style={styles.itemContainer}>
+            {currentPokemon.types.map(type => (
+              <Text style={styles.typesPokemon}>{type}</Text>
+            ))}
+          </View>
+          <ImageBackground
+            style={styles.imgPokeStyle}
+            source={require('./../../assets/Images/Element.png')}
+          />
+          <ImageBackground
+            style={styles.imgPokemon}
+            source={{uri: currentPokemon.img}}></ImageBackground>
+        </View>
       </View>
-          <BottomSheet/>
+      <BottomSheet />
+      <View></View>
+      <ImageBackground
+        style={styles.imgEasterEggs}
+        source={require('./../../assets/Images/pika.jpeg')}
+      />
     </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
-
-
   imgPokeStyle: {
     width: '100%',
     height: 220,
@@ -132,11 +118,11 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     marginHorizontal: -80,
   },
-  button: {
-    width: 100,
-    height: 100,
-    backgroundColor: 'red',
+  imgEasterEggs: {
+    height: '70%',
+    zIndex: -100,
   },
+  
 
   parent: {
     flex: 1,
@@ -144,20 +130,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: 40,
   },
-  compnentsContainer: {
-    width: '100%',
-    height: 500,
-    borderRadius: 20,
-    top: -50,
-    backgroundColor: 'white',
-  },
+ 
 
   typesPokemon: {
     color: 'white',
+    margin:2,
     fontWeight: 'bold',
     fontSize: 17,
     position: 'relative',
     textAlign: 'center',
+    zIndex:10,
   },
   itemContainer: {
     marginLeft: 30,
@@ -227,12 +209,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     width: 316,
   },
-
-  // flat list
-
-  test: {
-    zIndex: 1000000,
-    width: '100%',
-    height: 100,
-  },
+  
 });
