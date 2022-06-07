@@ -20,7 +20,6 @@ import {
 
 const Pokemons = ({key, item}) => {
   const navigation = useNavigation();
- console.log('JE TEEEEEEEEEEESTTTTTTT',Pokemons);
 
   return (
     <TouchableOpacity
@@ -31,11 +30,6 @@ const Pokemons = ({key, item}) => {
       }}
       onPress={() =>
         navigation.navigate('Details', {
-          // name: item.name,
-          // id: item.number,
-          // type: item.types[0],
-          // color: item.types[0],
-          // img: item.img,
           currentPokemon:item,
 
         })

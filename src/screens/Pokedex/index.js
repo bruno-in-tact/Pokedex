@@ -2,7 +2,8 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {textColor} from './src/assets/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PokemonsInfo} from '../../types/pokemonInfo';
-import { ActivityIndicator } from 'react-native';
+import {ActivityIndicator} from 'react-native';
+import FloattingButton from './../../components/FloatingButton';
 
 import {
   ImageBackground,
@@ -21,19 +22,25 @@ import Pokemons from './../../components/Pokemons';
 export default function Pokedex() {
   const navigation = useNavigation();
   const [allPokemons, setAllPokemons] = useState([]);
+
   const [isLoading, setisLoading] = useState(false);
-  const [pageCurrent, setpageCurrent] = useState(1);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     const init = async () => {
       setisLoading(true);
-      const allPokemons = await fetchPokemons();
-      setAllPokemons(allPokemons);
+
+      // faire transformation ici
+      //liste des pokemons entre offset et limite, rajouté a la liste de pokemon existant les pokemons retourné
+      const newPokemons = await fetchPokemons(offset);
+      setAllPokemons([...allPokemons, ...newPokemons]);
       setisLoading(false);
+      console.log('USE EFFECT OFFSET ', offset);
+      //transformer mon page current en offset
     };
 
     init();
-  }, [pageCurrent]);
+  }, [offset]);
 
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
 
@@ -42,20 +49,15 @@ export default function Pokedex() {
 
   const arrayPokemonsInformations = [...allPokemons];
 
-  // const handleLoadMore = () => {
-  //   if (!isLoading) {
-  //      setPageCurrent(pageCurrent + 1);
-  //      setIsLoading(true);
-  //     () => fetchPokemons();
-  //   }
-  // };
+  function handleLoadMore() {
+    if (!isLoading) {
+      setOffset(offset + 20);
+    }
+  }
 
-  // const renderFooter = () => {
-  //   return isLoading  ? (
-
-  //     <ActivityIndicator size="large" />
-  //   ) : null;
-  // }
+  function renderFooter() {
+    return isLoading ? <ActivityIndicator size="large" /> : null;
+  }
 
   return (
     <View
@@ -85,21 +87,21 @@ export default function Pokedex() {
       />
 
       {/* --------------------------------------components POKEMONS */}
-      <ScrollView>
 
-      <FlatList
+       <FlatList
         style={{}}
         contentContainerStyle={styles.container}
         numColumns={2}
         data={allPokemons}
         keyExtractor={item => item.name}
         showsVerticalScrollIndicator={false}
-        // onEndReached={handleLoadMore}
-        // ListFooterComponent={renderFooter}
+        onEndReached={handleLoadMore}
+        ListFooterComponent={renderFooter}
         onEndReachedThreshold={0}
         renderItem={({item, index}) => <Pokemons key={index} item={item} />}
-      />
-      </ScrollView>
+      /> 
+
+      <FloattingButton />
     </View>
   );
 }
@@ -136,11 +138,11 @@ const styles = StyleSheet.create({
 
   // flat list
   container: {
-    flex: 1,
     marginHorizontal: 5,
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 170,
+    zIndex: 0,
   },
   loader: {
     alignItems: 'center',

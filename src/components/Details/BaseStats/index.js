@@ -72,11 +72,6 @@ const BaseStats = ({
         </View>
 
         
-
-
-
-
-
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <View style={styles.progressBar}>
             <Animated.View

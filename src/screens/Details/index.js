@@ -44,22 +44,6 @@ export default function Details() {
     useState(undefined);
 
  
-  console.log('JE TEST MON OBJECT POKEMONS', currentPokemon);
-  console.log('currentPokemon.name', currentPokemon.name);
-
-
-
-  //USE EFFECT POKEMONSINFOS
-  useEffect(() => {
-    console.log('JE FETCH POKEMONSPECIES DETAILS');
-    const init = async () => {
-      const allPokemons = await pokeSpecies(currentPokemon.number);
-      setPokemonInfoDescritpion(pokemonInfoDescritpion);
-      //consle.log('test descritpion de mon pokemon', myPokemonDescription);
-    };
-    init();
-  }, []);
-
 
   return (
     <GestureHandlerRootView style={{flex: 1, backgroundColor: 'white'}}>
