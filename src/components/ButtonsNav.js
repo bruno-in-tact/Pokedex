@@ -16,16 +16,11 @@ const ButtonsNav = ({ text }) => {
 };
 
 const styles = StyleSheet.create({
-  button: {
-    //width: "33%",
-  //  top:60,
-  //  marginHorizontal:'10%'
-  zIndex:100000,
-  },
+ 
   text: {
-    fontSize: 13,
-    color: "grey",
+    fontSize: 14,
     textAlign: "center",
+    
   },
 });
 

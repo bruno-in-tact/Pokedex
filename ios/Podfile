@@ -23,6 +23,8 @@ target 'Pokedex' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNColorMatrixImageFilters', :path => '../node_modules/react-native-color-matrix-image-filters'
+
   target 'PokedexTests' do
     inherit! :complete
     # Pods for testing

@@ -13,15 +13,39 @@ export async function fetchPokemons(offset) {
 
   console.log('pokemonsDetails----->', pokemonsDetails);
   const ArrayPokemonsDetails = pokemonsDetails.map(
-    ({sprites, id, types, height, weight, hp, abilities, ...item}, i) => ({
+    (
+      {
+        sprites,
+        id,
+        types,
+        height,
+        weight,
+        hp,
+        abilities,
+        base_experience,
+        imgNext,
+        imgPrevious,
+        moves,
+        ...item
+      },
+      i,
+    ) => ({
       name: pokemons[i].name,
       img:
         //  `https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/${pokemons[i].name}.png`,
         `https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/${id}.png?raw=true`,
+      imgNext: `https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/${
+        id + 1
+      }.png?raw=true`,
+      imgPrevious: `https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/${
+        id - 1
+      }.png?raw=true`,
       number: id,
       types: types.map(t => t.type.name),
       height: height,
       abilities: abilities.map(a => a.ability.name),
+      moves: moves.map(m => m.move.name),
+      base_experience: base_experience,
       weight: weight,
       stats: item.stats.reduce((acc, cur) => {
         acc[cur.stat.name] = cur.base_stat;
@@ -34,6 +58,38 @@ export async function fetchPokemons(offset) {
 }
 //---------------------------------------------------------------------------------------------
 
+export async function fecthPokemon(id) {
+  const myPokemon = await request(`/pokemon/${id}`);
+  console.log('Hello its mee maario ', myPokemon);
+
+  const arrayMyPokemon = 
+    {
+      name: myPokemon.name,
+      number: myPokemon.id,
+      img: `https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/${myPokemon.id}.png?raw=true`,
+      imgNext: `https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/${
+        myPokemon.id + 1
+      }.png?raw=true`,
+      imgPrevious: `https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/${
+        myPokemon.id - 1
+      }.png?raw=true`,
+      types: myPokemon.types.map(t => t.type.name),
+      abilities: myPokemon.abilities.map(a => a.ability.name),
+      moves: myPokemon.moves.map(m => m.move.name),
+      base_experience: myPokemon.base_experience,
+      weight: myPokemon.weight,
+      stats: myPokemon.stats.reduce((acc, cur) => {
+        acc[cur.stat.name] = cur.base_stat;
+        return acc;
+      }, {}),
+    }
+  
+  console.log('Here is my pokemon', arrayMyPokemon);
+  return arrayMyPokemon;
+  //  return myPokemon;
+}
+
+// POKEMONS SPECIES
 export async function pokeSpecies(id) {
   console.log('ENTREES  : ');
   const getPokemonSpeciesById = await request(`/pokemon-species/${id}/`);
@@ -48,7 +104,6 @@ export async function pokeGender(gender_rate) {
   return getPokemonGenderById;
 }
 
-
 export async function pokeEvolution(id) {
   console.log('ENTRE POKE EVOLUTION : ');
   const getPokemonEvolutionById = await request(`/evolution-chain/${id}/`);
@@ -56,37 +111,33 @@ export async function pokeEvolution(id) {
   let evoChain = [];
   let evoData = chain.chain;
 
-do {
-  let numberOfEvolutions = evoData['evolves_to'].length;  
+  do {
+    let numberOfEvolutions = evoData['evolves_to'].length;
 
-  evoChain.push({
-    "species_name": evoData .species.name,
-    "min_level": !evoData ? 1 : evoData .min_level,
-    "trigger_name": !evoData ? null : evoData .trigger.name,
-    "item": !evoData ? null : evoData .item
-  });
+    evoChain.push({
+      species_name: evoData.species.name,
+      min_level: !evoData ? 1 : evoData.min_level,
+      trigger_name: !evoData ? null : evoData.trigger.name,
+      item: !evoData ? null : evoData.item,
+    });
 
-  if(numberOfEvolutions > 1) {
-    for (let i = 1;i < numberOfEvolutions; i++) { 
-      evoChain.push({
-        "species_name": evoData.evolves_to[i].species.name,
-        "min_level": !evoData.evolves_to[i]? 1 : evoData.evolves_to[i].min_level,
-        "trigger_name": !evoData.evolves_to[i]? null : evoData.evolves_to[i].trigger.name,
-        "item": !evoData.evolves_to[i]? null : evoData.evolves_to[i].item
-     });
+    if (numberOfEvolutions > 1) {
+      for (let i = 1; i < numberOfEvolutions; i++) {
+        evoChain.push({
+          species_name: evoData.evolves_to[i].species.name,
+          min_level: !evoData.evolves_to[i]
+            ? 1
+            : evoData.evolves_to[i].min_level,
+          trigger_name: !evoData.evolves_to[i]
+            ? null
+            : evoData.evolves_to[i].trigger.name,
+          item: !evoData.evolves_to[i] ? null : evoData.evolves_to[i].item,
+        });
+      }
     }
-  }        
 
-  evoData = evoData['evolves_to'][0];
-
-} while (!!evoData && evoData.hasOwnProperty('evolves_to'));
-console.log('evochainnnnnn', evoChain)
-return evoChain;
-
-
-
+    evoData = evoData['evolves_to'][0];
+  } while (!!evoData && evoData.hasOwnProperty('evolves_to'));
+  console.log('evochainnnnnn', evoChain);
+  return evoChain;
 }
-
-
-
-

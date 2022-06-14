@@ -15,47 +15,42 @@ import {
   TextInput,
 } from 'react-native';
 
-const Moves = ({hp, height, description, weight, ...otherprops}) => {
-  console.log('TEST STATS dans about', height);
+const Moves = ({moves, ...otherprops}) => {
+  console.log('TEST MOVESSS dans MOVES', moves);
 
   return (
-    <View style={styles.about}>
-     <Text>Components MOVES</Text>
+    <View >
+      <Text style={styles.title}>Moves</Text>
+
+
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          marginVertical: 10,
+        }}>
+          <ScrollView>
+            {moves.map(move => (
+              <Text style={styles.moves}>{move}</Text>
+            ))}
+
+          </ScrollView>
+      </View>
     </View>
   );
 };
 export default Moves;
 const styles = StyleSheet.create({
-  component: {
-    width: '100%',
-  },
-  about: {
-    height: '100%',
-    width: '100%',
-  },
-  text: {
-    marginHorizontal: '10%',
-  },
 
-  container: {
-    flex: 1,
-    flexWrap: 'wrap',
-    marginVertical: 30,
-    width: '80%',
-    borderRadius: 15,
-    borderColor: 'grey',
-    borderWidth: 1,
-    marginHorizontal: '10%',
-    padding: 15,
-    opacity: 0.5,
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-
-  data: {
+  title: {
+    fontSize: 18,
     color: 'black',
-    fontSize: 15,
-    padding: 7,
     fontWeight: 'bold',
+    marginVertical: 10,
   },
+  moves :{
+    padding:2,
+  }
 });

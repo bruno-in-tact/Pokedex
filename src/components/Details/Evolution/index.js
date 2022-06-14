@@ -31,7 +31,7 @@ const Evolution = ({id, img}) => {
         }}>
         <ImageBackground
           style={styles.imgPokeBall}
-          source={require('./../../../assets/Images/Element.png')}
+          source={require('./../../../assets/Images/poke.jpeg')}
         />
         <Image style={styles.imgPokemon} source={{uri: img}}></Image>
 
@@ -60,7 +60,7 @@ const Evolution = ({id, img}) => {
 
         <ImageBackground
           style={styles.imgPokeBallRight}
-          source={require('./../../../assets/Images/Element.png')}
+          source={require('./../../../assets/Images/poke.jpeg')}
         />
         <Image style={styles.imgPokemonRight} source={{uri: img}}></Image>
 
@@ -93,7 +93,7 @@ const Evolution = ({id, img}) => {
         }}>
         <ImageBackground
           style={styles.imgPokeBall}
-          source={require('./../../../assets/Images/Element.png')}
+          source={require('./../../../assets/Images/poke.jpeg')}
         />
         <Image style={styles.imgPokemon} source={{uri: img}}></Image>
 
@@ -122,7 +122,7 @@ const Evolution = ({id, img}) => {
 
         <ImageBackground
           style={styles.imgPokeBallRight}
-          source={require('./../../../assets/Images/Element.png')}
+          source={require('./../../../assets/Images/poke.jpeg')}
         />
         <Image style={styles.imgPokemonRight} source={{uri: img}}></Image>
 
@@ -149,7 +149,7 @@ const Evolution = ({id, img}) => {
         }}>
         <ImageBackground
           style={styles.imgPokeBall}
-          source={require('./../../../assets/Images/Element.png')}
+          source={require('./../../../assets/Images/poke.jpeg')}
         />
         <Image style={styles.imgPokemon} source={{uri: img}}></Image>
 
@@ -178,7 +178,7 @@ const Evolution = ({id, img}) => {
 
         <ImageBackground
           style={styles.imgPokeBallRight}
-          source={require('./../../../assets/Images/Element.png')}
+          source={require('./../../../assets/Images/poke.jpeg')}
         />
         <Image style={styles.imgPokemonRight} source={{uri: img}}></Image>
 
@@ -202,8 +202,7 @@ export default Evolution;
 const styles = StyleSheet.create({
   imgPokeBall: {
     height: 80,
-    width: 140,
-    left: -60,
+    width: 80,
     position: 'absolute',
   },
   imgPokemon: {
@@ -216,8 +215,8 @@ const styles = StyleSheet.create({
 
   imgPokeBallRight: {
     height: 80,
-    width: 140,
-    right: -10,
+    width: 80,
+    right: -5,
     position: 'absolute',
   },
   imgPokemonRight: {

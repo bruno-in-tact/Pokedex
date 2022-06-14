@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {textColor} from './src/assets/colors';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import getColorByPokemonType from './../../utils/pokemonTypeColor';
-import {fetchPokemons} from './../../cors/pokeApi';
+import {fecthPokemon} from './../../cors/pokeApi';
 import {pokeSpecies} from './../../cors/pokeApi';
 
 import ButtonsNav from './../../components/ButtonsNav';
@@ -32,18 +32,42 @@ import {
   Dimensions,
 } from 'react-native';
 
+import {
+  Grayscale,
+  Sepia,
+  Tint,
+  ColorMatrix,
+  concatColorMatrices,
+  invert,
+  contrast,
+  saturate,
+} from 'react-native-color-matrix-image-filters';
+
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
-export default function Details() {
+export default function Details(props) {
   const navigation = useNavigation();
   const route = useRoute();
-  const { currentPokemon} = route.params;
+  const {currentPokemon} = route.params;
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
-  const [pokemonData, setPokemonData] = useState(undefined);
-  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] =
-    useState(undefined);
+  const [myCurrentPokemon, setMyCurrentPokemon] = useState(currentPokemon);
+  // je crée une fonction async qui doit fetch monPokemon ID,
+  // qui doit setState du nextPokemon, et renvoyer le newPokemonData
+  async function goToNextPokemon() {
+    const myPokemonData = await fecthPokemon(currentPokemon.number + 1);
+    setMyCurrentPokemon(myPokemonData);
+    console.log('NEXT POKEMON DATA ', myPokemonData);
+  }
+  async function goToPreviousPokemon() {
+    const myPokemonData = await fecthPokemon(currentPokemon.number - 1);
+    setMyCurrentPokemon(myPokemonData);
+    console.log('PREVIOUS POKEMON DATA ', myPokemonData);
+  }
 
- 
+
+  const myProps = (props) =>{
+    return myCurrentPokemon
+  }
 
   return (
     <GestureHandlerRootView style={{flex: 1, backgroundColor: 'white'}}>
@@ -51,7 +75,8 @@ export default function Details() {
         <View
           style={{
             ...styles.imgBackground,
-            backgroundColor: getColorByPokemonType(currentPokemon.types[0]),
+            backgroundColor: getColorByPokemonType(myCurrentPokemon.types[0]),
+
           }}>
           <ImageBackground
             style={styles.heart}
@@ -65,26 +90,41 @@ export default function Details() {
               resizeMode="cover"
             />
           </TouchableOpacity>
-          <Text style={styles.pokemonName}>{currentPokemon.name}</Text>
+          <Text style={styles.pokemonName}>{myCurrentPokemon.name}</Text>
           <Text style={styles.id}>
-            #{String(currentPokemon.number).padStart(3, '0')}
+            #{String(myCurrentPokemon.number).padStart(3, '0')}
           </Text>
           <View style={styles.itemContainer}>
-            {currentPokemon.types.map(type => (
+            {myCurrentPokemon.types.map(type => (
               <Text style={styles.typesPokemon}>{type}</Text>
             ))}
           </View>
           <ImageBackground
             style={styles.imgPokeStyle}
-            source={require('./../../assets/Images/Element.png')}
+            source={require('./../../assets/Images/poke.jpeg')}
           />
           <ImageBackground
             style={styles.imgPokemon}
-            source={{uri: currentPokemon.img}}></ImageBackground>
+            source={{uri: myCurrentPokemon.img}}></ImageBackground>
+
+          {/* JE RE RENDER MON COMPONENTS AVEC LES NOUVELLES DATA */}
+
+          <TouchableOpacity onPress={() => goToNextPokemon()}>
+            <ImageBackground
+              style={{...styles.imgNextPokemon}}
+              source={{uri: currentPokemon.imgNext}}></ImageBackground>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => goToPreviousPokemon()}>
+            <ImageBackground
+              style={styles.imgPreviousPokemon}
+              source={{uri: currentPokemon.imgPrevious}}></ImageBackground>
+          </TouchableOpacity>
         </View>
       </View>
-      <BottomSheet />
-      <View></View>
+
+      {/* //passe en props le my current */}
+      <BottomSheet{...myCurrentPokemon }/>
       <ImageBackground
         style={styles.imgEasterEggs}
         source={require('./../../assets/Images/pika.jpeg')}
@@ -95,18 +135,17 @@ export default function Details() {
 
 const styles = StyleSheet.create({
   imgPokeStyle: {
-    width: '100%',
+    width: 220,
     height: 220,
     alignItems: 'center',
     flex: 1,
-    opacity: 0.5,
-    marginHorizontal: -80,
+    opacity: 0.8,
+    marginHorizontal: 90,
   },
   imgEasterEggs: {
     height: '70%',
     zIndex: -100,
   },
-  
 
   parent: {
     flex: 1,
@@ -114,16 +153,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: 40,
   },
- 
 
   typesPokemon: {
     color: 'white',
-    margin:2,
+    margin: 2,
     fontWeight: 'bold',
     fontSize: 17,
     position: 'relative',
     textAlign: 'center',
-    zIndex:10,
+    zIndex: 10,
   },
   itemContainer: {
     marginLeft: 30,
@@ -172,6 +210,27 @@ const styles = StyleSheet.create({
     marginHorizontal: 100,
     zIndex: 1,
   },
+
+  imgNextPokemon: {
+    width: 50,
+    height: 50,
+    zIndex: 1,
+    position: 'absolute',
+    right: 0,
+    top: -120,
+    opacity: 0.5,
+  },
+
+  imgPreviousPokemon: {
+    width: 50,
+    height: 50,
+    zIndex: 1,
+    position: 'absolute',
+    left: 0,
+    top: -120,
+    opacity: 0.5,
+  },
+
   imgArrowBack: {
     left: 20,
     top: 30,
@@ -193,5 +252,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     width: 316,
   },
-  
 });

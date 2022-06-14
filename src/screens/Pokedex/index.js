@@ -22,28 +22,24 @@ import Pokemons from './../../components/Pokemons';
 export default function Pokedex() {
   const navigation = useNavigation();
   const [allPokemons, setAllPokemons] = useState([]);
-
   const [isLoading, setisLoading] = useState(false);
   const [offset, setOffset] = useState(0);
+  const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
 
   useEffect(() => {
     const init = async () => {
       setisLoading(true);
-
       // faire transformation ici
       //liste des pokemons entre offset et limite, rajouté a la liste de pokemon existant les pokemons retourné
       const newPokemons = await fetchPokemons(offset);
+      // je destructure les pokemons en tableau et j'ajoute les new pokemons avec offset
       setAllPokemons([...allPokemons, ...newPokemons]);
       setisLoading(false);
       console.log('USE EFFECT OFFSET ', offset);
       //transformer mon page current en offset
     };
-
     init();
   }, [offset]);
-
-  const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
-
   // je crée un array pour récupérer plusieurs ou toutes les informations sur les pokemons
   // sur mon flatList data
 
@@ -58,7 +54,6 @@ export default function Pokedex() {
   function renderFooter() {
     return isLoading ? <ActivityIndicator size="large" /> : null;
   }
-
   return (
     <View
       style={{
@@ -87,17 +82,16 @@ export default function Pokedex() {
       />
 
       {/* --------------------------------------components POKEMONS */}
-
+      
        <FlatList
-        style={{}}
+        style={{overflow:'hidden'}}
         contentContainerStyle={styles.container}
         numColumns={2}
         data={allPokemons}
         keyExtractor={item => item.name}
-        showsVerticalScrollIndicator={false}
         onEndReached={handleLoadMore}
         ListFooterComponent={renderFooter}
-        onEndReachedThreshold={0}
+        onEndReachedThreshold={0.1}        
         renderItem={({item, index}) => <Pokemons key={index} item={item} />}
       /> 
 
@@ -111,7 +105,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     width: 249,
-    height: 290,
+    height: 300,
+    top: -18,
   },
   imgArrowBack: {
     position: 'absolute',
@@ -119,13 +114,14 @@ const styles = StyleSheet.create({
     top: 30,
     width: 22,
     height: 13,
+    zIndex:10000000000,
   },
   imgList: {
     position: 'absolute',
     right: 48,
     width: 16,
     height: 18,
-    top: 90,
+    top: 80,
   },
   title: {
     position: 'absolute',
@@ -143,6 +139,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 170,
     zIndex: 0,
+    overflow:'hidden',
+    
   },
   loader: {
     alignItems: 'center',

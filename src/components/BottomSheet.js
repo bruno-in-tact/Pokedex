@@ -5,24 +5,21 @@ import React, {
   useState,
 } from 'react';
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
-
 import {textColor} from './src/assets/colors';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {fetchPokemons} from './../cors/pokeApi';
 import {pokeSpecies} from './../cors/pokeApi';
 import {pokeGender} from './../cors/pokeApi';
 import {pokeEvolution} from './../cors/pokeApi';
-
-
 import ButtonsNav from './ButtonsNav';
 import Pokemons from './Pokemons';
 import About from './Details/About/index';
 import BaseStats from './Details/BaseStats/index';
 import Evolution from './Details/Evolution/index';
 import Moves from './Details/Moves/index';
-
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import getPokemonGender from './../utils/getPokemonGender';
+import getColorByPokemonType from './../utils/pokemonTypeColor';
 
 import Animated, {
   Extrapolate,
@@ -32,7 +29,6 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-
 import {
   ImageBackground,
   FlatList,
@@ -49,9 +45,9 @@ import {
   Alert,
 } from 'react-native';
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
-
-const BottomSheet = () => {
-  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] = useState(undefined);
+const BottomSheet = props => {
+  const [pokemonInfoDescritpion, setPokemonInfoDescritpion] =
+    useState(undefined);
   const [pokemonInfoGender, setPokemonInfoGender] = useState(undefined);
   const [pokemonEvolution, setPokemonEvolution] = useState(undefined);
 
@@ -61,6 +57,7 @@ const BottomSheet = () => {
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
   useState(undefined);
   const [currentTab, setCurrentTab] = useState(1);
+
   const handleDisplayTabs = i => {
     setCurrentTab(i);
   };
@@ -77,21 +74,12 @@ const BottomSheet = () => {
   });
   //const map = array.map(element => element * 2);
   //USE EFFECT POKEMONSINFOS
-  console.log('JE FETCH FEREFERFREGERGREGERGKNERKGZNERZGREZGERGREGGREGR DANS BOTTOM SHEET HEIGHT: ',currentPokemon.height, 'XP : ', currentPokemon['base_experience'], currentPokemon.base_experience);
   useEffect(() => {
     console.log('JE FETCH POKEMONSPECIES DANS BOTTOM SHEET');
-    
+
     const init = async () => {
       const myPokemon = await pokeSpecies(currentPokemon.number);
       setPokemonInfoDescritpion(myPokemon);
-      console.log(
-        'JETEST DANS MA FUNCTION ',
-        myPokemon.egg_groups[0].name,
-        'test gender----------------------------',
-        myPokemon.gender_rate,
-        'TEST BASE EXPERIENCE -------------',
-        myPokemon.base_experience,
-      );
     };
     init();
   }, []);
@@ -102,30 +90,15 @@ const BottomSheet = () => {
       const myPokemon = await pokeGender(currentPokemon.gender_rate);
       //il faut donner l'int pokemon gender du pokemon en tant que paramettre
       setPokemonInfoGender(myPokemon.gender_rate);
-      console.log('genderRATE TEST: ', myPokemon.gender_rate);
-      console.log('FEVVVRVZVRZVZVZV',myPokemon.name)
-  
     };
     init();
   }, []);
+
   const pokemonGendersRate = getPokemonGender(currentPokemon.gender_rate);
 
-  console.log('geeeeeendeeeeeerrrrrrrrrrrrrrrrrrrr',pokemonGendersRate)
-  // useEffect(() => {
-  //   console.log('JE FETCH POKEMONEVOLUTION DANS BOTTOM SHEET');
-  //   const init = async () => {
-  //     const myPokemon = await pokeEvolution(currentPokemon.number);
-  //     setPokemonInfoGender(myPokemon);
-  //     console.log('POKEMON GENDER --------: ', myPokemon.name);	
-
-  //     console.log('POKEMON EVOLUTION --------: ', myPokemon.chain.evolution_details	
-  //     [0].species.name);
-  //   };
-  //   init();
-  // }, []);
-
-
-  
+  const style = props.normalText
+    ? {fontWeight: 'bold', fontSize: 15, fontFamily: undefined}
+    : {};
 
   return (
     <GestureDetector gesture={gesture}>
@@ -140,8 +113,36 @@ const BottomSheet = () => {
                 display: 'flex',
                 flexDirection: 'row',
               }}>
+
+
+                {/* TEST COLOR BACKGROUND  */}
               <TouchableOpacity
-                style={{height: 30, width: 100}}
+                style={{
+                  ...styles.button,
+                  ...props.style,
+                  backgroundColor: props.whiteTheme
+                    ? '#FFFFFF'
+                    : getColorByPokemonType(currentPokemon[0]),
+                }}
+                onPress={props.onPress}>
+                <Text style={{}} numberOfLines={1} adjustsFontSizeToFit={true}>
+                  {props.title}
+                  lalalalalal
+                </Text>
+              </TouchableOpacity>
+
+
+
+
+              <TouchableOpacity
+                style={{
+                  height: 30,
+                  width: 100,
+                  backgroundColor: handleDisplayTabs ? '#0b97c4' : '#FFFFFF',
+                  borderRadius: 10,
+                  color: 'white',
+                  alignItems: 'center',
+                }}
                 onPress={() => {
                   handleDisplayTabs(1);
                 }}>
@@ -180,24 +181,23 @@ const BottomSheet = () => {
                 display: 'flex',
                 paddingHorizontal: 30,
               }}>
-              {currentTab === 1 &&
-                pokemonInfoDescritpion &&
-                // pokemonInfoGender && 
-                (
-                  <About
-                    height={currentPokemon.height}
-                    weight={currentPokemon.weight}
-                    xp={currentPokemon.base_experience}
-                    abilities={currentPokemon.abilities}
-                    hapiness={pokemonInfoDescritpion.base_happiness}
-                    description={
-                      pokemonInfoDescritpion.flavor_text_entries[6].flavor_text
-                    }
-                    egg_groups={pokemonInfoDescritpion.egg_groups[0].name}
-                    // gender={pokemonInfoGender.name}
-                    genderRate={pokemonInfoDescritpion.gender_rate}
-                  />
-                )}
+              {currentTab === 1 && pokemonInfoDescritpion && (
+                // pokemonInfoGender &&
+                <About
+                  height={currentPokemon.height}
+                  weight={currentPokemon.weight}
+                  xp={currentPokemon.base_experience}
+                  abilities={currentPokemon.abilities}
+                  hapiness={pokemonInfoDescritpion.base_happiness}
+                  description={
+                    pokemonInfoDescritpion.flavor_text_entries[6].flavor_text
+                  }
+                  egg_groups={pokemonInfoDescritpion.egg_groups[0].name}
+                  // gender={pokemonInfoGender.name}
+                  genderRate={pokemonInfoDescritpion.gender_rate}
+                  habitat={pokemonInfoDescritpion.habitat.name}
+                />
+              )}
 
               {currentTab === 2 && (
                 <BaseStats
@@ -224,7 +224,12 @@ const BottomSheet = () => {
                 />
               )}
 
-              {currentTab === 4 && <Moves id={currentPokemon.number} />}
+              {currentTab === 4 && pokemonInfoDescritpion && (
+                <Moves
+                  id={currentPokemon.number}
+                  moves={currentPokemon.moves}
+                />
+              )}
             </View>
           </View>
         </SafeAreaView>
@@ -249,6 +254,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 15,
     borderRadius: 25,
+  },
+
+  btnNormal: {
+    borderColor: 'blue',
+    borderWidth: 1,
+    borderRadius: 10,
+    height: 30,
+    width: 100,
+  },
+  btnPress: {
+    borderColor: 'blue',
+    borderWidth: 1,
+    height: 30,
+    width: 100,
   },
 });
 

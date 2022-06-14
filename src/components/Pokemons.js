@@ -31,11 +31,9 @@ const Pokemons = ({key, item}) => {
       onPress={() =>
         navigation.navigate('Details', {
           currentPokemon:item,
-
         })
       }>
       <Image style={styles.imgPokemon} source={{uri: item.img}} />
-
       <View>
         <View style={styles.id}>
           <Text style={styles.name}>
@@ -62,7 +60,6 @@ const styles = StyleSheet.create({
   imgPokeStyle: {
     width: 83,
     height: 83,
-    right: 10,
     position: 'absolute',
     bottom: -50,
   },

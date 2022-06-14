@@ -22,19 +22,24 @@ import Pokemons from './../../components/Pokemons';
 
 export default function Home() {
   const [pokemons, setPokemons] = useState([]);
-  const [searchfeild, setSearchfeild] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const navigation = useNavigation();
 
-
-  useEffect(() => {
-    fetchPokemons();
+  const searchPokemon = async (pokemonName) => {
+    const response = await fetchPokemons();
+    setAllPokemons(allPokemons);
+  }
+  useEffect(()=>{
+      searchPokemon('Pikachu')
   }, []);
 
-  const fetchPokemons = () => {
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=500')
-      .then(response => response.json())
-      .then(pokemons => setPokemons(pokemons.results));
-  };
+// if (searchPokemon) {
+//   navigation.navigate('Details', {
+//     searchPokemon,
+//     from:'searchTerm',
+//   })
+// }
+
   return (
     <View style={styles.backgroundHomeContainer}>
       <ImageBackground
@@ -46,9 +51,12 @@ export default function Home() {
         <TextInput
           style={styles.searchfeild}
           placeholder="Search Pokemons"
-          onChangeText={value => setSearchfeild(value)}
-          value={searchfeild}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
+  
+
+
       </View>
       <ScrollView>
         <View style={styles.container}>
@@ -158,4 +166,5 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginTop: 180,
   },
+ 
 });

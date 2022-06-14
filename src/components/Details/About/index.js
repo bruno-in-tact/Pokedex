@@ -25,21 +25,19 @@ const About = ({
   abilities,
   gender,
   genderRate,
+  habitat,
   xp,
   ...otherprops
 }) => {
   console.log('ABOUT descritpion entiere:', description);
   console.log('ABOUT descritpion GENDER:', gender);
 
-  
-  const genderRatioFemale =  12.5* genderRate;
-  const genderRatioMale =  12.5* (8-genderRate);
-  
+  const genderRatioFemale = 12.5 * genderRate;
+  const genderRatioMale = 12.5 * (8 - genderRate);
+
   return (
     <View style={styles.about}>
       <View style={styles.component}>
-
-
         <Text style={styles.descritpion}>{description}</Text>
       </View>
 
@@ -68,10 +66,7 @@ const About = ({
         <Text style={{fontSize: 15, fontWeight: 'bold', opacity: 0.5}}>
           Gender :
         </Text>
-
-        <Text style={{fontSize: 15}}>
-          {gender}
-        </Text>
+        {/* <Text style={{fontSize: 15}}>{gender}</Text> */}
         <Image
           style={styles.imgGender}
           source={require('./../../../assets/Images/genderMale.png')}
@@ -87,14 +82,14 @@ const About = ({
       <View
         style={{
           display: 'flex',
-          flexDirection: 'row',        
+          flexDirection: 'row',
           width: '100%',
           marginVertical: 10,
         }}>
         <Text style={{fontSize: 15, fontWeight: 'bold', opacity: 0.5}}>
           Egg Groups :
         </Text>
-        <Text> {egg_groups}</Text>
+        <Text style={{fontSize:15}}> {egg_groups}</Text>
       </View>
 
       <View
@@ -107,7 +102,7 @@ const About = ({
         <Text style={{fontSize: 15, fontWeight: 'bold', opacity: 0.5}}>
           Egg Cycle :
         </Text>
-        <Text> Grass</Text>
+        <Text style={{fontSize:15}}> Grass</Text>
       </View>
 
       <Text style={styles.title}>Abilities</Text>
@@ -120,10 +115,9 @@ const About = ({
           width: '45%',
           marginVertical: 10,
         }}>
-
-            {abilities.map(a => (
-              <Text style={styles.abilities}>{a}</Text>
-            ))}
+        {abilities.map(a => (
+          <Text style={styles.abilities}>{a}</Text>
+        ))}
       </View>
 
       <Text style={styles.title}>Training</Text>
@@ -133,14 +127,18 @@ const About = ({
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          width: '45%',
+          width: '50%',
           marginVertical: 10,
         }}>
-
-           
-              <Text style={styles.abilities}>Base expérience : {xp}</Text>
+        <Text style={{fontSize: 15, fontWeight: 'bold', opacity: 0.5}}>
+          {' '}
+          Base Expérience :
+        </Text>
+      <Text style={{fontSize:15}}> {xp}</Text>
       </View>
 
+      <Text style={styles.title}>Habitat</Text>
+      <Text style={{fontSize:15}}>{habitat}</Text>
     </View>
   );
 };
@@ -149,7 +147,7 @@ const styles = StyleSheet.create({
   component: {
     width: '100%',
   },
-  descritpion:{
+  descritpion: {
     marginHorizontal: '10%',
   },
   imgGender: {},
@@ -165,9 +163,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 10,
   },
-  abilities:{
-    fontSize: 16,
-
+  abilities: {
+    fontSize: 15,
   },
 
   container: {
